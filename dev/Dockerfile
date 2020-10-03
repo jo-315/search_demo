@@ -10,6 +10,3 @@ ADD ./app /code
 
 # pythonパッケージのインストール
 RUN pip install -r requirements.txt
-
-# flaskのサーバー起動
-CMD ["python", "app.py"]
