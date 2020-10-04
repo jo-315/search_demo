@@ -2,11 +2,8 @@
 FROM python:3.7
 
 # 作業用ディレクトリの作成
-RUN mkdir /code
-WORKDIR /code
+RUN mkdir /app
+WORKDIR /app
 
 # appをマウントする
-ADD ./app /code
-
-# pythonパッケージのインストール
-RUN pip install -r requirements.txt
+ADD ./app /app

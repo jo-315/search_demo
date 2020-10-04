@@ -2,7 +2,7 @@
 flamework: Flask
 DB: PostgreSQL
 
-app下のファイルが仮想環境（docker）内のcodeにマウントされる
+app下のファイルが仮想環境（docker）内のappにマウントされる
 
 # 起動コマンド
 /devで`docker-compose up`
@@ -19,3 +19,23 @@ app下のファイルが仮想環境（docker）内のcodeにマウントされ�
 
 - 停止
 `docker-compose stop`
+
+- コンテナ内に入る(flask)
+`docker-compose exec flask bash`
+
+- コンテナ内に入る(DB: postgres)
+`docker-compose exec postgres bash`
+
+- db初期化
+`docker-compose down -v`
+
+# PostgreSQL
+- データベースへ接続
+`psql -U postgres(ユーザー名)`
+
+## データベース内でのコマンド
+- テーブル一覧
+`\dt`
+
+- テーブル内のデータを一覧
+`select * from テーブル名`
