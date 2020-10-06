@@ -1,10 +1,22 @@
 <html>
-<body>
-  <h1>検索デモ</h1>
-  <div>
-    {% for home in homes %}
-    <p>{{home.name}}</p>
-    {% endfor %}
-  </div>
-</body>
+  <head>
+    <title>検索デモ</title>
+  </head>
+  <body>
+    <h1>検索デモ</h1>
+    <div class="search_condition">
+    </div>
+    <div class="result_containar">
+      <h2>検索結果</h2>
+      <div class="results_list">
+        <ul>
+          {% for home in homes %}
+          <li>
+            {{home.name}}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>
