@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from app.database import init_db
 
 
 def create_app():
@@ -8,10 +8,9 @@ def create_app():
 
     # database settings
     app.config.from_pyfile('dbconfig.cfg')
-    db = SQLAlchemy(app)
-    db.init_app(app)
+    init_db(app)
 
-    return app, db
+    return app
 
 
-app, db = create_app()
+app = create_app()

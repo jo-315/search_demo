@@ -1,11 +1,13 @@
 from flask import render_template
 from app import app
-# from models import Home
+# import models
+from app.models import Home
 
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    homes = Home.query.all()
+    return render_template("index.html", homes=homes)
 
 
 if __name__ == "__main__":

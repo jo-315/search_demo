@@ -38,4 +38,4 @@ app下のファイルが仮想環境（docker）内のappにマウントされ�
 `\dt`
 
 - テーブル内のデータを一覧
-`select * from テーブル名`
+`select * from テーブル名;`

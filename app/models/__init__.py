@@ -1,3 +1,6 @@
-from app import db
+from .home import Home
 
-db = db
+
+__all__ = [
+    Home,
+]

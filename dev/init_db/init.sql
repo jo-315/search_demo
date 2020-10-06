@@ -2,6 +2,7 @@ set client_encoding = 'UTF8';
 
 create table home
 (
+  id serial primary key,
   name varchar not null,
   price integer not null,
   addres varchar not null,
