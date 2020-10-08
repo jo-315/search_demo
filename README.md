@@ -1,14 +1,19 @@
 # 環境
 flamework: Flask
 DB: PostgreSQL
+server: Heroku
 
-app下のファイルが仮想環境（docker）内のappにマウントされる
+## localでの起動コマンド
+`docker-compose up`
 
-# 起動コマンド
-/devで`docker-compose up`
+## heroku
+gitにpushした際、自動でherokuにデプロイされる
 
+- Build the Dockerfile in the current directory and push the Docker image.
+`heroku container:push web `
 
-
+- Deploy the changes
+`heroku container:release web`
 
 # dockerコマンド
 - 実行

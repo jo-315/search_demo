@@ -1,5 +1,5 @@
-# build:
-#   docker:
-#     web: Dockerfile
-#   config:
-#     WORKDIR: app
+build:
+  docker:
+    web: Dockerfile
+run:
+  web: /server

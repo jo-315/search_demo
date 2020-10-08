@@ -6,4 +6,4 @@ RUN mkdir /app
 WORKDIR /app
 
 # appをマウントする
-ADD ./app /app
+ADD . /app
