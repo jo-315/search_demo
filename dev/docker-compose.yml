@@ -31,6 +31,6 @@ services:
       FLASK_APP: '/app/main.py'
     command: >
       sh -c '
-          pip install -r /app/requirements.txt
+          pip install -r /requirements.txt
           flask run --host 0.0.0.0 --port 5000
       '
