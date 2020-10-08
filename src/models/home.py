@@ -1,4 +1,4 @@
-from app.database import db
+from src.database import db
 
 
 class Home(db.Model):

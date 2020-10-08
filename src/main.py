@@ -1,7 +1,7 @@
 from flask import render_template, request
-from app import app
+from src import app
 # import models
-from app.models import Home
+from src.models import Home
 
 
 @app.route('/')
