@@ -1,14 +1,20 @@
 # 環境
 flamework: Flask
+
 DB: PostgreSQL
+
 server: Heroku
 
 ## localでの起動コマンド
 `docker-compose up`
 
+※`-d`をつけるとバックグラウンドで実行
+
 ## heroku
+https://search-demo-1234.herokuapp.com/
 gitにpushした際、自動でherokuにデプロイされる
 
+### Heroku内でdockerのコンテナを立てるとき
 - Build the Dockerfile in the current directory and push the Docker image.
 `heroku container:push web `
 
