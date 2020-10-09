@@ -8,6 +8,7 @@ WORKDIR /app
 # appをマウントする
 ADD . /app
 
-ENV FLASK_APP ./src/main.py
+ENV FLASK_APP=./src/main.py
+ENV FLASK_RUN_HOST=0.0.0.0
 
-CMD python -m flask run -h 0.0.0.0 -p $PORT
+CMD ./flask.sh
