@@ -1,4 +1,4 @@
-build:
-  docker:
-    web: docker/flask/Dockerfile
-    db: docker/postgres/Dockerfile
+# build:
+#   docker:
+#     web: docker/flask/Dockerfile
+#     db: docker/postgres/Dockerfile
