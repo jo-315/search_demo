@@ -4,8 +4,8 @@ services:
     image: postgres:13.0
     container_name: postgres
     build:
-      context: .
-      dockerfile: ./docker/postgres/Dockerfile
+      context: ./docker/postgres
+      dockerfile: ./Dockerfile
     ports:
       - 5432:5432
     restart: always
@@ -18,7 +18,7 @@ services:
     container_name: flask
     build:
       context: .
-      dockerfile: ./docker/flask/Dockerfile
+      dockerfile: ./Dockerfile
     depends_on:
       - postgres-server
     ports:
