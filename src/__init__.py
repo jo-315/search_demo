@@ -7,7 +7,7 @@ def create_app():
     app = Flask(__name__)
 
     # database settings
-    app.config.from_pyfile('dbconfig.cfg')
+    app.config.from_pyfile('dbconfig.py')
     init_db(app)
 
     return app
