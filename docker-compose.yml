@@ -3,15 +3,13 @@ services:
   postgres-server:
     image: postgres:13.0
     container_name: postgres
-    expose:
-      - "5432"
+    ports:
+      - 5432:5432
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_INITDB_ARGS: --encoding=UTF-8
-    volumes:
-      - ./init_db:/docker-entrypoint-initdb.d
 
   flask:
     container_name: flask
@@ -22,8 +20,6 @@ services:
       - postgres-server
     ports:
       - 5000:5000
-    volumes:
-      - .:/app
     tty: true
     environment:
       TZ: "Asia/Tokyo"
