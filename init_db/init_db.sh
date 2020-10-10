@@ -1,3 +1,3 @@
 #!/bin/sh
 
-# psql --file ./init.sql
+psql -U postgres --file /docker-entrypoint-initdb.d/init.sql

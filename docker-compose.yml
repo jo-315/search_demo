@@ -12,6 +12,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_INITDB_ARGS: --encoding=UTF-8
+    stdin_open: true
+    tty: true
+    restart: always
 
   flask:
     container_name: flask
