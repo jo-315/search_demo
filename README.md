@@ -14,7 +14,16 @@ server: Heroku
 https://search-demo-1234.herokuapp.com/
 gitにpushした際、自動でherokuにデプロイされる
 
+### databaseの操作
+- SQLファイルからdataを挿入
+`heroku pg:psql postgresql-contoured-15367 --app search-demo-1234 --file ./init_db/docker-entrypoint-initdb.d/init.sql`
+
+※portが5432のため接続できない場合があり
+
 ### Heroku内でdockerのコンテナを立てるとき
+dashboardからRestart all dynosする
+
+### コマンドラインから実行する場合
 - Build the Dockerfile in the current directory and push the Docker image.
 `heroku container:push web `
 
@@ -25,7 +34,7 @@ gitにpushした際、自動でherokuにデプロイされる
 - 実行
 `docker-compose up`
 
-バックグラウンド
+- バックグラウンド
 `docker-compose up`
 
 - 停止
