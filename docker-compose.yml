@@ -4,8 +4,8 @@ services:
     image: postgres:13.0
     container_name: postgres
     build:
-      context: .
-      dockerfile: ./init_db/Dockerfile
+      context: ./init_db
+      dockerfile: ./Dockerfile
     ports:
       - 5432:5432
     environment:
