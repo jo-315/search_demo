@@ -4,6 +4,6 @@ FROM postgres:13.0
 # WORKDIR /search_demo
 
 # ADD . /search_demo
-COPY ./*.sql /docker-entrypoint-initdb.d/
+COPY ./init_db/ /docker-entrypoint-initdb.d/
 
 # CMD ./init_db.sh
