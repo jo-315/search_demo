@@ -1,23 +1,38 @@
 <html>
   <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/style.css">
     <title>検索デモ</title>
   </head>
   <body>
     <h1>検索デモ</h1>
-    <div class="search_condition">
+    <div class="search_condition box">
+      <h3>確定検索</h3>
       <form action="/search" method="POST">
         <label for="name">名前：</label>
         <input type="text" name="name">
         <input type="submit" value="送信">
+        <label for="name">住所：</label>
+        <input type="text" name="address">
+        <input type="submit" value="送信">
       </form>
+      <h3>あいまい検索</h3>
     </div>
     <div class="result_containar">
       <h2>検索結果</h2>
+      <div>
+        検索ヒット数：
+      </div>
       <div class="results_list">
         <ul>
           {% for home in homes %}
-          <li>
-            {{home.name}}
+          <li class="box">
+            <p class="result_item_name">{{home.name}}</p>
+            <div>
+              <p>値段：{{home.price}}</p>
+              <p>住所：{{home.address}}</p>
+              <p>間取り：{{home.layout}}</p>
+            </div>
           </li>
           {% endfor %}
         </ul>

@@ -1,0 +1,27 @@
+/* 共通 */
+.box{
+  border: solid 1px;
+  border-color: black;
+}
+
+/* 検索部分 */
+.search_condition{
+  padding: 10px 20px;
+}
+
+/* 検索結果表示 */
+.results_list ul{
+  padding: 0;
+}
+
+.results_list ul li{
+  list-style: none;
+  margin: 10px;
+  padding: 0px 25px;
+}
+
+/* 検索結果 item */
+.result_item_name{
+  font-weight: bold;
+  font-size: 20px;
+}

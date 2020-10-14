@@ -1,6 +1,5 @@
 from flask import render_template, request
 from src import app
-# import models
 from src.models import Home
 
 
@@ -13,8 +12,12 @@ def index():
 @app.route('/search', methods=['POST'])
 def post():
     name = request.form.get('name')
-    home = Home.query.filter_by(name=name).first()
-    return render_template("index.html", homes=[home])
+    address = request.form.get('address')
+    if len(name) != 0:
+        homes = Home.query.filter_by(name=name)
+    elif len(address) != 0:
+        homes = Home.query.filter_by(address=address)
+    return render_template("index.html", homes=homes)
 
 
 if __name__ == "__main__":

@@ -49,6 +49,10 @@ dashboardからRestart all dynosする
 - db初期化
 `docker-compose down -v`
 
+# Flask
+デバッグ  
+app.logger.debug("デバッグメッセージ")
+
 # PostgreSQL
 - データベースへ接続
 `psql -U postgres(ユーザー名)`
