@@ -4,16 +4,16 @@ from src import app
 from src.models import Home
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     homes = Home.query.all()
     return render_template("index.html", homes=homes)
 
 
-@app.route('/', methods=['POST'])
+@app.route('/search', methods=['POST'])
 def post():
     name = request.form.get('name')
-    home = Home.query.filter_by(name=name)
+    home = Home.query.filter_by(name=name).first()
     return render_template("index.html", homes=[home])
 
 

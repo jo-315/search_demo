@@ -5,13 +5,11 @@
   <body>
     <h1>検索デモ</h1>
     <div class="search_condition">
-      <div>
+      <form action="/search" method="POST">
         <label for="name">名前：</label>
-        <input type="text" id="name" name="name" placeholder="名前">
-      </div>
-      <div>
+        <input type="text" name="name">
         <input type="submit" value="送信">
-      </div>
+      </form>
     </div>
     <div class="result_containar">
       <h2>検索結果</h2>
