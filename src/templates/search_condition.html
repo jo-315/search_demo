@@ -1,0 +1,12 @@
+<div class="search_condition box">
+  <form action="/search" method="POST">
+    {% include "confirm.html" %}
+    {% include "ambiguous_sarch.html" %}
+    <input type="submit" value="検索スタート!!">
+  </form>
+  <div class="reset_search">
+    <form action="/" method="GET">
+      <input type="submit" value="検索リセット">
+    </form>
+  </div>
+</div>

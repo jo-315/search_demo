@@ -1,0 +1,32 @@
+<h3>あいまい検索</h3>
+<div>
+  <label for="price">値段：</label>
+  <select name="price">
+    <option value="0">0 ~ 5万</option>
+    <option value="1">5万 ~ 6万</option>
+    <option value="2">6万 ~ 7万</option>
+    <option value="3">7万 ~ 8万</option>
+    <option value="4">8万 ~ 9万</option>
+    <option value="5">9万 ~ 10万</option>
+    <option value="6">10万 ~ </option>
+  </select>
+  {% with name = "price_weight" %}
+  {% include "search_weight.html" %}
+  {% endwith %}
+</div>
+<div>
+  <label for="station_distance">駅までの距離：</label>
+  <select name="station_distance">
+  </select>
+  {% with name = "station_distance_weight" %}
+  {% include "search_weight.html" %}
+  {% endwith %}
+</div>
+<div>
+  <label for="age">築年数：</label>
+  <select name="age">
+  </select>
+  {% with name = "age_weight" %}
+  {% include "search_weight.html" %}
+  {% endwith %}
+</div>
