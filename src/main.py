@@ -6,7 +6,8 @@ from src.models import Home
 @app.route('/', methods=['GET'])
 def index():
     homes = Home.query.all()
-    return render_template("index.html", homes=homes)
+    result_num = len(homes)
+    return render_template("index.html", homes=homes, result_num=result_num)
 
 
 @app.route('/search', methods=['POST'])
@@ -17,7 +18,8 @@ def post():
         homes = Home.query.filter_by(name=name)
     elif len(address) != 0:
         homes = Home.query.filter_by(address=address)
-    return render_template("index.html", homes=homes)
+    result_num = homes.count()
+    return render_template("index.html", homes=homes, result_num=result_num)
 
 
 if __name__ == "__main__":
