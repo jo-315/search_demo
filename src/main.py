@@ -10,15 +10,21 @@ def index():
     return render_template("index.html", homes=homes, result_num=result_num)
 
 
+# 検索実行method
+# 検索結果はlist型で管理する
 @app.route('/search', methods=['POST'])
 def post():
+    homes = []
+    # 確定検索
     name = request.form.get('name')
     address = request.form.get('address')
     if len(name) != 0:
-        homes = Home.query.filter_by(name=name)
+        homes = Home.query.filter_by(name=name).all()
     elif len(address) != 0:
-        homes = Home.query.filter_by(address=address)
-    result_num = homes.count()
+        homes = Home.query.filter_by(address=address).all()
+    result_num = len(homes)
+
+    # あいまい検索
     return render_template("index.html", homes=homes, result_num=result_num)
 
 

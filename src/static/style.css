@@ -9,6 +9,10 @@
   padding: 10px 20px;
 }
 
+.search_condition form div{
+  margin-bottom: 10px;
+}
+
 /* 検索結果表示 */
 .results_list ul{
   padding: 0;

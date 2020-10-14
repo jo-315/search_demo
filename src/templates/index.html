@@ -7,16 +7,69 @@
   <body>
     <h1>検索デモ</h1>
     <div class="search_condition box">
-      <h3>確定検索</h3>
       <form action="/search" method="POST">
-        <label for="name">名前：</label>
-        <input type="text" name="name">
-        <input type="submit" value="送信">
-        <label for="name">住所：</label>
-        <input type="text" name="address">
-        <input type="submit" value="送信">
+        <h3>確定検索</h3>
+        <div>
+          <label for="name">名前：</label>
+          <input type="text" name="name">
+        </div>
+        <div>
+          <label for="name">住所：</label>
+          <input type="text" name="address">
+        </div>
+        <h3>あいまい検索</h3>
+        <div>
+          <label for="name">値段：</label>
+          <select name="price">
+            <option value="0">0 ~ 5万</option>
+            <option value="1">5万 ~ 6万</option>
+            <option value="2">6万 ~ 7万</option>
+            <option value="3">7万 ~ 8万</option>
+            <option value="4">8万 ~ 9万</option>
+            <option value="5">9万 ~ 10万</option>
+            <option value="6">10万 ~ </option>
+          </select>
+          <label for="name">検索重要度：</label>
+          <select name="price_weight">
+            <option value="0">0%</option>
+            <option value="1">10%</option>
+            <option value="2">20%</option>
+            <option value="3">30%</option>
+            <option value="4">40%</option>
+            <option value="5">50%</option>
+            <option value="6">60%</option>
+            <option value="7">70%</option>
+            <option value="8">80%</option>
+            <option value="9">90%</option>
+            <option value="10">100%</option>
+          </select>
+        </div>
+        <div>
+          <label for="name">間取り：</label>
+          <select name="price">
+          </select>
+          <label for="name">検索重要度：</label>
+          <select name="price_weight">
+            <option value="0">0%</option>
+            <option value="1">10%</option>
+            <option value="2">20%</option>
+            <option value="3">30%</option>
+            <option value="4">40%</option>
+            <option value="5">50%</option>
+            <option value="6">60%</option>
+            <option value="7">70%</option>
+            <option value="8">80%</option>
+            <option value="9">90%</option>
+            <option value="10">100%</option>
+          </select>
+        </div>
+        <input type="submit" value="検索スタート!!">
       </form>
-      <h3>あいまい検索</h3>
+      <div class="reset_search">
+        <form action="/" method="GET">
+          <input type="submit" value="検索リセット">
+        </form>
+      </div>
     </div>
     <div class="result_containar">
       <h2>検索結果</h2>
@@ -29,7 +82,7 @@
           <li class="box">
             <p class="result_item_name">{{home.name}}</p>
             <div>
-              <p>値段：{{home.price}}</p>
+              <p>値段：{{home.price/10000}}万円</p>
               <p>住所：{{home.address}}</p>
               <p>間取り：{{home.layout}}</p>
             </div>
