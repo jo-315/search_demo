@@ -18,15 +18,15 @@ def post():
     # 確定検索
     name = request.form.get('name')
     address = request.form.get('address')
-    layout = request.form.get('layout')
-    structure = request.form.get('structure')
+    layout = request.form.getlist('layout')
+    structure = request.form.getlist('structure')
     homes = Home.query.filter(
         or_(
             Home.name == name,
             and_(
                 Home.address == address if address else True,
-                Home.layout == layout if layout else True,
-                Home.structure == structure if structure else True
+                Home.layout.in_(layout) if layout else True,
+                Home.structure.in_(structure) if structure else True
             )
         )
     ).all()
