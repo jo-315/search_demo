@@ -7,14 +7,15 @@
     <ul>
       {% for home in homes %}
       <li class="box">
-        <p class="result_item_name">{{home.name}}</p>
+        <p class="result_item_name">{{home['model'].name}}</p>
+        <p>マッチ度:{{home['point']}}</p>
         <div>
-          <p>値段：{{home.price/10000}}万円</p>
-          <p>住所：{{home.address}}</p>
-          <p>間取り：{{home.layout}}</p>
-          <p>駅からの距離：{{home.station_distance}}分</p>
-          <p>築年数：{{home.age}}年</p>
-          <p>構造：{{home.structure}}</p>
+          <p>値段：{{home['model'].price/10000}}万円</p>
+          <p>住所：{{home['model'].address}}</p>
+          <p>間取り：{{home['model'].layout}}</p>
+          <p>駅からの距離：{{home['model'].station_distance}}分</p>
+          <p>築年数：{{home['model'].age}}年</p>
+          <p>構造：{{home['model'].structure}}</p>
         </div>
       </li>
       {% endfor %}

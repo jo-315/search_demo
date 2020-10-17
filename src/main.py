@@ -20,7 +20,7 @@ def post():
     address = request.form.get('address')
     layout = request.form.getlist('layout')
     structure = request.form.getlist('structure')
-    homes = Home.query.filter(
+    result_homes = Home.query.filter(
         or_(
             Home.name == name,
             and_(
@@ -30,9 +30,15 @@ def post():
             )
         )
     ).all()
-    result_num = len(homes)
+    result_num = len(result_homes)
 
-    # あいまい検索 TODO
+    # あいまい検索
+    # hashに変換
+    homes = [{"model": home, "point": 0} for (home) in result_homes]
+
+    # 点数の高い順に上から表示できるようにする
+    homes = sorted(homes, key=lambda x: x["point"], reverse=True)
+
     return render_template("index.html", homes=homes, result_num=result_num)
 
 
