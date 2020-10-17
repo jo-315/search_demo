@@ -7,6 +7,10 @@
   <body>
     <h1>検索デモ</h1>
     {% include "search_condition.html" %}
-    {% include "result.html" %}
+    {% if search_flag %}
+      {% include "result.html" %}
+    {% else %}
+      {% include "show.html" %}
+    {% endif %}
   </body>
 </html>

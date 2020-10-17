@@ -10,15 +10,20 @@
     <option value="5">9万 ~ 10万</option>
     <option value="6">10万 ~ </option>
   </select>
-  {% with name = "price_weight" %}
+  {% with name = "price" %}
   {% include "search_weight.html" %}
   {% endwith %}
 </div>
 <div>
   <label for="station_distance">駅までの距離：</label>
   <select name="station_distance">
+    <option value="0">0~5分</option>
+    <option value="1">6~10分</option>
+    <option value="2">11~15分</option>
+    <option value="3">16~20分</option>
+    <option value="4">21~25分</option>
   </select>
-  {% with name = "station_distance_weight" %}
+  {% with name = "station_distance" %}
   {% include "search_weight.html" %}
   {% endwith %}
 </div>
@@ -26,7 +31,7 @@
   <label for="age">築年数：</label>
   <select name="age">
   </select>
-  {% with name = "age_weight" %}
+  {% with name = "age" %}
   {% include "search_weight.html" %}
   {% endwith %}
 </div>
