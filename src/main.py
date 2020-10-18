@@ -6,7 +6,8 @@ from src.models import Home
 # あいまい検索用のconst
 ambiguous_items = ["price", "station_distance", "age"]
 price_class = [0, 50000, 60000, 70000, 80000, 90000, 100000, 999999999]
-# TODO station_distance_class = [0, 50000, 60000, 70000, 80000, 90000, 100000, 999999999]
+station_distance_class = [0, 5, 10, 15, 20, 25, 999999999]
+age_class = [0, 10, 20, 30, 40, 50, 60, 999999999]
 
 
 @app.route('/', methods=['GET'])
@@ -66,7 +67,7 @@ def calc_weight(home, name):
         # 検索条件との一致度を確認
         if (getattr(home, name) > eval(eval("name + '_class[' + key + ']'"))
             and
-                getattr(home, name) < eval(eval("name + '_class[' + str(int(key)+1) + ']'"))):
+                getattr(home, name) <= eval(eval("name + '_class[' + str(int(key)+1) + ']'"))):
             point += 1
 
         # 重み付け処理
