@@ -63,6 +63,9 @@ def calc_weight(home, name):
 
     point = 0
 
+    if key == "null":
+        return 0
+
     if not weight == "0":
         # 検索条件との一致度を確認
         if (getattr(home, name) > eval(eval("name + '_class[' + key + ']'"))
