@@ -5,7 +5,7 @@ from src.models import Home
 
 # あいまい検索用のconst
 ambiguous_items = ["price", "station_distance", "age"]
-ambiguous_item_dict = {"price": "値段", "station_distance": "駅までの距離", "age": "築年数："}
+ambiguous_item_dict = {"price": "値段", "station_distance": "駅までの距離", "age": "築年数"}
 price_class = [0, 50000, 60000, 70000, 80000, 90000, 100000, 999999999]
 price_label = ["0 ~ 5万", "5万 ~ 6万", "6万 ~ 7万", "7万 ~ 8万", "8万 ~ 9万", "9万 ~ 10万", "10万 ~"]
 station_distance_class = [0, 5, 10, 15, 20, 25, 999999999]
@@ -74,6 +74,8 @@ def post():
 
     # 点数の高い順に上から表示できるようにする
     homes = sorted(homes, key=lambda x: x["point"], reverse=True)
+
+    print(search_conditions)
 
     # TODO ポイントの規格化（最大は100にする）
 
