@@ -4,6 +4,15 @@
   border-color: black;
 }
 
+.inline {
+  display: inline;
+  margin-left: 30px;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
 /* 検索部分 */
 .search_condition{
   padding: 10px 20px;

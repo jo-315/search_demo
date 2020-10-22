@@ -19,11 +19,12 @@
   <label for="station_distance">駅までの距離：</label>
   <select name="station_distance">
     <option value="null">指定なし</option>
-    <option value="0">0~5分</option>
-    <option value="1">6~10分</option>
-    <option value="2">11~15分</option>
-    <option value="3">16~20分</option>
-    <option value="4">21~25分</option>
+    <option value="0">0 ~ 5分</option>
+    <option value="1">6 ~ 10分</option>
+    <option value="2">11 ~ 15分</option>
+    <option value="3">16 ~ 20分</option>
+    <option value="4">21 ~ 25分</option>
+    <option value="5">25分 ~</option>
   </select>
   {% with name = "station_distance" %}
   {% include "search_weight.html" %}
@@ -33,13 +34,13 @@
   <label for="age">築年数：</label>
   <select name="age">
     <option value="null">指定なし</option>
-    <option value="0">0~10年</option>
-    <option value="1">11~20年</option>
-    <option value="2">21~30年</option>
-    <option value="3">31~40年</option>
-    <option value="4">41~50年</option>
-    <option value="5">51~60年</option>
-    <option value="6">60年~</option>
+    <option value="0">0 ~ 10年</option>
+    <option value="1">11 ~ 20年</option>
+    <option value="2">21 ~ 30年</option>
+    <option value="3">31 ~ 40年</option>
+    <option value="4">41 ~ 50年</option>
+    <option value="5">51 ~ 60年</option>
+    <option value="6">60年 ~</option>
   <select name="age">
   </select>
   {% with name = "age" %}
