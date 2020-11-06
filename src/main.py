@@ -88,10 +88,16 @@ def admin():
     return render_template("admin.html")
 
 
-# データセット追加ページ
+# データセット追加
 @app.route('/data_form', methods=['POST'])
 def data():
-    return render_template("data_form.html")
+    return
+
+
+# CSV追加
+@app.route('/csv_form', methods=['POST'])
+def csv():
+    return
 
 
 # methodの切り出し
