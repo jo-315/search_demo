@@ -38,3 +38,8 @@
   font-weight: bold;
   font-size: 20px;
 }
+
+/* 管理者ページ */
+.admin_box {
+  margin-bottom: 20px;
+}

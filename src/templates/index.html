@@ -5,7 +5,13 @@
     <title>検索デモ</title>
   </head>
   <body>
-    <h1>検索デモ</h1>
+    <div>
+      <h1>検索デモ</h1>
+      <div>
+        <form action="/admin" method="GET">
+          <input type="submit" value="管理者画面へ"></form>
+      </div>
+    </div>
     {% include "search_condition.html" %}
     {% if search_flag %}
       {% include "result.html" %}

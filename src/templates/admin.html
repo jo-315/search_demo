@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>管理者ページ</title>
+  </head>
+  <body>
+    <div>
+      <h1>管理者ページ</h1>
+      <div>
+        <form action="/" method="GET">
+          <input type="submit" value="検索ページへ"></form>
+      </div>
+    </div>
+    <div class="admin_box box">
+      <h2>データ追加</h2>
+      {% include "data_form.html" %}
+      {% include "csv_form.html" %}
+    </div>
+    <div class="admin_box box">
+      <h2>検索条件のカスタマイズ</h2>
+    </div>
+  </body>
+</html>

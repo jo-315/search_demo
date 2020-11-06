@@ -82,6 +82,18 @@ def post():
     return render_template("index.html", homes=homes, result_num=result_num, search_flag=True, search_conditions=search_conditions)
 
 
+# 管理者ページ
+@app.route('/admin', methods=['GET'])
+def admin():
+    return render_template("admin.html")
+
+
+# データセット追加ページ
+@app.route('/data_form', methods=['POST'])
+def data():
+    return render_template("data_form.html")
+
+
 # methodの切り出し
 def calc_weight(home, name, key, weight):
     point = 0
