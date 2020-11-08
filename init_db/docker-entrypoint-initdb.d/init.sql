@@ -51,3 +51,10 @@ insert into home(name, price, address, layout, station_distance, age, structure)
   ('ワクワク京都', 34000, '京都府京都市', '1K', 9, 3, '鉄筋系'),
   ('京都一番', 47000, '京都府京都市', '1K', 32, 2, '鉄筋系')
 ;
+
+create table search
+(
+  id serial primary key,
+  name varchar not null,
+  type varchar not null
+)
