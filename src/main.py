@@ -18,7 +18,7 @@ age_label = ["0 ~ 10年", "11 ~ 20年", "21 ~ 30年", "31 ~ 40年", "41 ~ 50年"
 def index():
     homes = Home.query.all()
     result_num = len(homes)
-    return render_template("index.html", homes=homes, result_num=result_num, search_flag=False)
+    return render_template("search/index.html", homes=homes, result_num=result_num, search_flag=False)
 
 
 # 検索実行method
@@ -51,7 +51,7 @@ def post():
     result_num = len(result_homes)
 
     if result_num == 0:
-        return render_template("index.html", homes=[], result_num=result_num, search_flag=True)
+        return render_template("search/index.html", homes=[], result_num=result_num, search_flag=True)
 
     # あいまい検索
     # hashに変換
@@ -79,13 +79,13 @@ def post():
 
     # TODO ポイントの規格化（最大は100にする）
 
-    return render_template("index.html", homes=homes, result_num=result_num, search_flag=True, search_conditions=search_conditions)
+    return render_template("search/index.html", homes=homes, result_num=result_num, search_flag=True, search_conditions=search_conditions)
 
 
 # 管理者ページ
 @app.route('/admin', methods=['GET'])
 def admin():
-    return render_template("admin.html")
+    return render_template("admin/admin.html")
 
 
 # データセット追加

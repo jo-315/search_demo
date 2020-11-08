@@ -12,7 +12,7 @@
     <option value="6">10万 ~ </option>
   </select>
   {% with name = "price" %}
-  {% include "search_weight.html" %}
+  {% include "search/search_weight.html" %}
   {% endwith %}
 </div>
 <div>
@@ -27,7 +27,7 @@
     <option value="5">25分 ~</option>
   </select>
   {% with name = "station_distance" %}
-  {% include "search_weight.html" %}
+  {% include "search/search_weight.html" %}
   {% endwith %}
 </div>
 <div>
@@ -44,6 +44,6 @@
   <select name="age">
   </select>
   {% with name = "age" %}
-  {% include "search_weight.html" %}
+  {% include "search/search_weight.html" %}
   {% endwith %}
 </div>

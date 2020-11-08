@@ -12,11 +12,11 @@
           <input type="submit" value="管理者画面へ"></form>
       </div>
     </div>
-    {% include "search_condition.html" %}
+    {% include "search/search_condition.html" %}
     {% if search_flag %}
-      {% include "result.html" %}
+      {% include "search/result.html" %}
     {% else %}
-      {% include "show.html" %}
+      {% include "search/show.html" %}
     {% endif %}
   </body>
 </html>
