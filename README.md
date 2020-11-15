@@ -15,6 +15,14 @@ https://search-demo-1234.herokuapp.com/
 gitにpushした際、自動でherokuにデプロイされる
 
 ### databaseの操作
+- 新しいモデルの追加
+dockerのflaskコンテナ内で以下を実行
+`flask db migrate`
+`flask db upgrade`
+
+- 新しいデータを投入
+`init.sql`を変更後、docker内のデータを初期化した上で再度立ち上げる
+
 - SQLファイルからdataを挿入
 `heroku pg:psql postgresql-contoured-15367 --app search-demo-1234 --file ./init_db/docker-entrypoint-initdb.d/init.sql`
 
@@ -50,7 +58,7 @@ dashboardからRestart all dynosする
 `docker-compose down -v`
 
 # Flask
-デバッグ  
+デバッグ
 app.logger.debug("デバッグメッセージ")
 
 # PostgreSQL

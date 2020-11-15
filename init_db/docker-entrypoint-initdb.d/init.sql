@@ -56,5 +56,17 @@ create table search
 (
   id serial primary key,
   name varchar not null,
-  type varchar not null
-)
+  search_type integer not null
+);
+
+-- 0→確定検索　1→あいまい検索
+
+insert into search(name, search_type) values
+  ('名前', 0),
+  ('家賃', 1),
+  ('住所', 0),
+  ('間取り', 0),
+  ('駅からの距離', 1),
+  ('築年数', 1),
+  ('構造', 0)
+;
