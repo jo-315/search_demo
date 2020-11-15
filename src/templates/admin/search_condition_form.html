@@ -1,17 +1,40 @@
 <div>
-  <p>説明</p>
+  <h3>説明いれる</h3>
+  <p>hogehoge</p>
 </div>
 <div>
-  <p>現在設定されている項目</p>
+  <h3>現在設定されている項目</h3>
+  <table class="search_condition_table">
+    <thead>
+      <tr>
+        <td>検索項目</td>
+        <td>検索タイプ</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for search in searchs %}
+        <tr>
+          <td class="search_condition_table__name">{{search.name}}</td>
+          {% if search.search_type==0 %}
+            <td class="search_condition_table__radio">ラジオボタン</td>
+          {% else %}
+            <td class="search_condition_table__pull">プルダウン</td>
+          {% endif %}
+          <td>変更</td>
+          <td>削除</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 <div>
-  <p>検索項目の追加</p>
+  <h3>検索項目の追加</h3>
   <form action="/data_form" method="POST">
     <label for="name">名前</label>
     <input type="text" name="name">
     <select name="price">
       <option value="radio">ラジオボタン</option>
-      <option value="0"></option>
+      <option value="pull">プルダウン</option>
     </select>
     <input type="submit" value="データ追加"></form>
 </div>

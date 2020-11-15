@@ -1,7 +1,7 @@
 from flask import render_template, request
 from sqlalchemy import and_
 from src import app
-from src.models import Home
+from src.models import Home, Search
 
 # あいまい検索用のconst
 ambiguous_items = ["price", "station_distance", "age"]
@@ -75,8 +75,6 @@ def post():
     # 点数の高い順に上から表示できるようにする
     homes = sorted(homes, key=lambda x: x["point"], reverse=True)
 
-    print(search_conditions)
-
     # TODO ポイントの規格化（最大は100にする）
 
     return render_template("search/index.html", homes=homes, result_num=result_num, search_flag=True, search_conditions=search_conditions)
@@ -85,7 +83,9 @@ def post():
 # 管理者ページ
 @app.route('/admin', methods=['GET'])
 def admin():
-    return render_template("admin/admin.html")
+    searchs = Search.query.all()
+    print(searchs[2].name)
+    return render_template("admin/admin.html", searchs=searchs)
 
 
 # データセット追加
@@ -100,7 +100,8 @@ def csv():
     return
 
 
-# methodの切り出し
+# --- methodの切り出し --- #
+
 def calc_weight(home, name, key, weight):
     point = 0
 

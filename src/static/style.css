@@ -1,4 +1,4 @@
-/* 共通 */
+/*** 共通 ***/
 .box{
   border: solid 1px;
   border-color: black;
@@ -13,7 +13,7 @@
   text-decoration: underline;
 }
 
-/* 検索部分 */
+/*** 検索部分 ***/
 .search_condition{
   padding: 10px 20px;
 }
@@ -39,7 +39,56 @@
   font-size: 20px;
 }
 
-/* 管理者ページ */
+/*** 管理者ページ ***/
 .admin_box {
   margin-bottom: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+.admin_box h3 {
+  margin-bottom: 5px;
+}
+
+/* 検索条件 */
+.search_condition_table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: table;
+  margin-left: 20px;
+  margin-bottom: 50px;
+}
+
+.search_condition_table thead{
+  color: brown;
+}
+
+.search_condition_table tr {
+  border-bottom: 1px solid rgb(0, 0, 0, 0.12);
+  transition:background .25s ease ;
+}
+
+.search_condition_table tbody tr:hover {
+  background: rgb(187 177 177 / 30%);
+}
+
+.search_condition_table th, td {
+  padding: 15px 30px;
+  border-radius: 2px;
+  display: table-cell;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.search_condition_table__name {
+  font-weight: bold;
+}
+
+.search_condition_table__radio {
+  color: darkblue;
+}
+
+.search_condition_table__pull {
+  color: darkslategray;
 }
