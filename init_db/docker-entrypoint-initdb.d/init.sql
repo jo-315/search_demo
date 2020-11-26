@@ -56,19 +56,24 @@ create table search
 (
   id serial primary key,
   name varchar not null,
+  name_en varchar not null,
+  search_order integer not null,
   search_type integer not null,
   step integer,
-  unit varchar
+  unit varchar,
+  search_max integer,
+  search_min integer,
+  items varchar
 );
 
 -- テキスト→0 ラジオボタン→1 プルダウン→2
 
-insert into search(name, search_type, step, unit) values
-  ('名前', 0, 0, ''),
-  ('家賃', 2, 5000, '円'),
-  ('住所', 1, 0, ''),
-  ('間取り', 1, 0, ''),
-  ('駅からの距離', 2, 5, '分'),
-  ('築年数', 2, 5, '年'),
-  ('構造', 1, 0, '')
+insert into search(name, name_en, search_order, search_type, step, unit) values
+  ('名前', 'name', 0, 0, 0, ''),
+  ('家賃', 'price', 1, 2, 5000, '円'),
+  ('住所', 'addres', 2, 1, 0, ''),
+  ('間取り', 'layout', 3, 1, 0, ''),
+  ('駅からの距離', 'distance', 4, 2, 5, '分'),
+  ('築年数', 'age', 4, 2, 5, '年'),
+  ('構造', 'strcutere',5, 1, 0, '')
 ;

@@ -6,25 +6,34 @@ from src.models import Home, Search
 # あいまい検索用のconst
 ambiguous_items = ["price", "station_distance", "age"]
 ambiguous_item_dict = {"price": "値段", "station_distance": "駅までの距離", "age": "築年数"}
-price_class = [0, 50000, 60000, 70000, 80000, 90000, 100000, 999999999]
-price_label = ["0 ~ 5万", "5万 ~ 6万", "6万 ~ 7万", "7万 ~ 8万", "8万 ~ 9万", "9万 ~ 10万", "10万 ~"]
-station_distance_class = [0, 5, 10, 15, 20, 25, 999999999]
-station_distance_label = ["0 ~ 5分", "6 ~ 10分", "11 ~ 15分", "16 ~ 20分", "21 ~ 25分", "25分 ~"]
-age_class = [0, 10, 20, 30, 40, 50, 60, 999999999]
-age_label = ["0 ~ 10年", "11 ~ 20年", "21 ~ 30年", "31 ~ 40年", "41 ~ 50年", "51 ~ 60年", "60年 ~"]
 
-
+# 最初の検索画面
 @app.route('/', methods=['GET'])
 def index():
+    # Homeモデルの総数
     homes = Home.query.all()
     result_num = len(homes)
-    return render_template("search/index.html", homes=homes, result_num=result_num, search_flag=False)
+
+    # 検索項目の準備
+    searchs = get_searchs()
+    print(searchs)
+
+    return render_template(
+        "search/index.html",
+        homes=homes,
+        result_num=result_num,
+        search_flag=False,
+        searchs=searchs
+    )
 
 
 # 検索実行method
 # 検索結果はlist型で管理する
 @app.route('/search', methods=['POST'])
 def post():
+    # 検索項目の準備
+    searchs = get_searchs()
+
     # 検索条件をフロントエンドに渡す
     search_conditions = []
 
@@ -51,13 +60,19 @@ def post():
     result_num = len(result_homes)
 
     if result_num == 0:
-        return render_template("search/index.html", homes=[], result_num=result_num, search_flag=True)
+        return render_template(
+            "search/index.html",
+            homes=[],
+            result_num=result_num,
+            search_flag=True,
+            searchs=searchs
+        )
 
     # あいまい検索
     # hashに変換
     homes = [{"model": home, "point": 0} for (home) in result_homes]
 
-    # 得点の計算
+    # 得点の計算 TODO: あいまい検索についてSearchモデルにデータを入れておく
     for ai_name in ambiguous_items:
         key = request.form.get(ai_name)
         weight = request.form.get(ai_name + '_weight')
@@ -68,7 +83,10 @@ def post():
                 h["point"] += 1
         # weightが0のときはポイントは加算しない
         elif not weight == "0":
-            search_conditions.append([ambiguous_item_dict[ai_name], ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])])
+            search_conditions.append([
+                ambiguous_item_dict[ai_name],
+                ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])
+            ])
             for h in homes:
                 h["point"] += calc_weight(h["model"], ai_name, key, weight)
 
@@ -77,14 +95,20 @@ def post():
 
     # TODO ポイントの規格化（最大は100にする）
 
-    return render_template("search/index.html", homes=homes, result_num=result_num, search_flag=True, search_conditions=search_conditions)
+    return render_template(
+        "search/index.html",
+        homes=homes,
+        result_num=result_num,
+        search_flag=True,
+        search_conditions=search_conditions,
+        searchs=searchs
+    )
 
 
 # 管理者ページ
 @app.route('/admin', methods=['GET'])
 def admin():
     searchs = Search.query.all()
-    print(searchs)
     return render_template("admin/admin.html", searchs=searchs)
 
 
@@ -115,6 +139,27 @@ def calc_weight(home, name, key, weight):
     point = point * int(weight)/100
 
     return point
+
+
+def get_searchs():
+    searchs = Search.query.all()
+
+    # TODO: 必要な項目に対してqueryよりデータを持ってくる
+    for search in searchs:
+        if search.search_type == 1:  # ラジオボタン
+            # 検索項目に該当するデータを全て取得→ラジオボタンで全て表示できるように
+            items = []
+            search.items = ",".join(items)
+        elif search.search_type == 2:  # プルダウン
+            # 検索に必要な項目を作成
+            min = 0
+            max = 0
+            search.search_min = min
+            search.search_max = max
+
+    searchs = sorted(searchs, key=lambda x: x.search_order)
+
+    return searchs
 
 
 if __name__ == "__main__":
