@@ -9,7 +9,8 @@
       <tr>
         <td>検索項目</td>
         <td>検索タイプ</td>
-        <td>TODO:最小単位</td>
+        <td>最小単位</td>
+        <td>単位</td>
       </tr>
     </thead>
     <tbody>
@@ -17,9 +18,21 @@
         <tr>
           <td class="search_condition_table__name">{{search.name}}</td>
           {% if search.search_type==0 %}
+            <td class="search_condition_table__text">テキスト</td>
+          {% elif search.search_type==1 %}
             <td class="search_condition_table__radio">ラジオボタン</td>
           {% else %}
             <td class="search_condition_table__pull">プルダウン</td>
+          {% endif %}
+          {% if search.step %}
+            <td>{{search.step}}</td>
+          {% else %}
+            <td></td>
+          {% endif %}
+          {% if search.unit %}
+            <td>{{search.unit}}</td>
+          {% else %}
+            <td></td>
           {% endif %}
           <td>変更</td>
           <td>削除</td>
@@ -30,12 +43,26 @@
 </div>
 <div>
   <h3>検索項目の追加</h3>
-  <form action="/data_form" method="POST">
-    <label for="name">名前</label>
-    <input type="text" name="name">
-    <select name="price">
-      <option value="radio">ラジオボタン</option>
-      <option value="pull">プルダウン</option>
-    </select>
+  <form class="search_condition_form" action="/data_form" method="POST">
+    <div>
+      <label for="name">名前: </label>
+      <input type="text" name="name">
+    </div>
+    <div>
+      <label for="search_type">検索タイプ: </label>
+      <select name="search_type">
+        <option value="text">テキスト</option>
+        <option value="radio">ラジオボタン</option>
+        <option value="pull">プルダウン</option>
+      </select>
+    </div>
+    <div>
+      <label for="step">最小単位: </label>
+      <input type="text" name="step">
+    </div>
+    <div>
+      <label for="unit">単位: </label>
+      <input type="text" name="unit">
+    </div>
     <input type="submit" value="データ追加"></form>
 </div>

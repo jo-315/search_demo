@@ -84,6 +84,7 @@ def post():
 @app.route('/admin', methods=['GET'])
 def admin():
     searchs = Search.query.all()
+    print(searchs)
     return render_template("admin/admin.html", searchs=searchs)
 
 

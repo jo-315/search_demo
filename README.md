@@ -20,6 +20,9 @@ dockerのflaskコンテナ内で以下を実行
 `flask db migrate`
 `flask db upgrade`
 
+`Target database is not up to date`のエラーが出る時
+`flask db stamp head`
+
 - 新しいデータを投入
 `init.sql`を変更後、docker内のデータを初期化した上で再度立ち上げる
 

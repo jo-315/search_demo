@@ -85,10 +85,22 @@
   font-weight: bold;
 }
 
+.search_condition_table__text {
+  color: rgb(31, 162, 202);
+}
+
 .search_condition_table__radio {
   color: darkblue;
 }
 
 .search_condition_table__pull {
   color: darkslategray;
+}
+
+.search_condition_form div {
+  margin-bottom: 5px;
+}
+
+.search_condition_form label {
+  margin-right: 5px;
 }
