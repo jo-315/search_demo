@@ -13,3 +13,4 @@ class Search(db.Model):
     search_min = db.Column(db.Integer, nullable=True)
     search_max = db.Column(db.Integer, nullable=True)
     items = db.Column(db.String(255), nullable=True)
+    ambiguous = db.Column(db.Boolean, nullable=False)

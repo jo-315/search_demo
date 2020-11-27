@@ -1,8 +1,18 @@
 <div class="search_condition box">
   <form action="/search" method="POST">
-    {% include "search/confirm_search.html" %}
-    {% include "search/ambiguous_search.html" %}
     <!-- TODO Searchモデルから検索項目を表示できるようにする -->
+    {% for search in searchs %}
+      <div>
+        <label for="">{{search.name}}</label>
+        {% if search.search_type==0 %}
+          テキスト
+        {% elif search.search_type==1 %}
+          ラジオボタン
+        {% else %}
+          プルダウン
+        {% endif %}
+      </div>
+    {% endfor %}
     <input type="submit" value="検索スタート!!">
   </form>
   <div class="reset_search">

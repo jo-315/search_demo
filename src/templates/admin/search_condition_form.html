@@ -17,6 +17,7 @@
       {% for search in searchs %}
         <tr>
           <td class="search_condition_table__name">{{search.name}}</td>
+
           {% if search.search_type==0 %}
             <td class="search_condition_table__text">テキスト</td>
           {% elif search.search_type==1 %}
@@ -24,16 +25,19 @@
           {% else %}
             <td class="search_condition_table__pull">プルダウン</td>
           {% endif %}
+
           {% if search.step %}
             <td>{{search.step}}</td>
           {% else %}
             <td></td>
           {% endif %}
+
           {% if search.unit %}
             <td>{{search.unit}}</td>
           {% else %}
             <td></td>
           {% endif %}
+
           <td>変更</td>
           <td>削除</td>
         </tr>

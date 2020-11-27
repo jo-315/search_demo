@@ -16,7 +16,6 @@ def index():
 
     # 検索項目の準備
     searchs = get_searchs()
-    print(searchs)
 
     return render_template(
         "search/index.html",
