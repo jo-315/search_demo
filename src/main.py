@@ -156,8 +156,11 @@ def get_searchs():
             search.items = ",".join(items)
         elif search.search_type == 2:  # プルダウン
             # 検索に必要な項目を作成
-            min = 0
-            max = 0
+            results = Home.query.order_by(eval('Home.' + search.name_en)).distinct(eval('Home.' + search.name_en)).all()
+
+            min = eval('results[0].' + search.name_en)
+            max = eval('results[-1].' + search.name_en)
+
             search.search_min = min
             search.search_max = max
 

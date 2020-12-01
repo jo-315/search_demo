@@ -74,7 +74,7 @@ insert into search(name, name_en, search_order, search_type, ambiguous, step, un
   ('家賃', 'price', 1, 2, TRUE, 5000, '円'),
   ('住所', 'address', 2, 1, FALSE, 0, ''),
   ('間取り', 'layout', 3, 1, FALSE, 0, ''),
-  ('駅からの距離', 'distance', 4, 2, TRUE, 5, '分'),
+  ('駅からの距離', 'station_distance', 4, 2, TRUE, 5, '分'),
   ('築年数', 'age', 4, 2, TRUE, 5, '年'),
   ('構造', 'structure',5, 1, FALSE, 0, '')
 ;
