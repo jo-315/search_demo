@@ -7,7 +7,9 @@
         {% if search.search_type==0 %}
           <input type="text" name={{search.name_en}}>
         {% elif search.search_type==1 %}
-          ラジオボタン
+          {% for item in search.items.split(',') %}
+            {{item}}
+          {% endfor %}
         {% else %}
           プルダウン
         {% endif %}
