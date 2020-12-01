@@ -3,13 +3,19 @@
     <!-- TODO Searchモデルから検索項目を表示できるようにする -->
     {% for search in searchs %}
       <div>
-        <label for="">{{search.name}}</label>
+        <label for={{search.name_en}}>{{search.name}}</label>
         {% if search.search_type==0 %}
           テキスト
         {% elif search.search_type==1 %}
           ラジオボタン
         {% else %}
           プルダウン
+        {% endif %}
+
+        {% if search.ambiguous %}
+          {% with name = search.name_en %}
+          {% include "search/search_weight.html" %}
+          {% endwith %}
         {% endif %}
       </div>
     {% endfor %}
