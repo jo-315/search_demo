@@ -4,17 +4,31 @@
     {% for search in searchs %}
       <div>
         <label for={{search.name_en}}>{{search.name}}</label>
+
+        <!-- テキスト -->
         {% if search.search_type==0 %}
           <input type="text" name={{search.name_en}}>
+
+        <!-- ラジオボタン -->
         {% elif search.search_type==1 %}
           {% for item in search.items.split(',') %}
             <label for={{item}}>{{item}}</label>
             <input type="checkbox" id={{item}} name="layout" value={{item}}>
           {% endfor %}
-        {% else %}
-          プルダウン
+
+        <!-- プルダウン -->
+        {% elif search.search_type==2 %}
+            <select name={{search.name_en}}>
+              <option value="null">指定なし</option>
+              {% for i in range(search.pull_menu_num) %}
+                <option value={{i}}>
+                  {{search.search_min + search.step*i}} ~ {{search.search_min + search.step*(i+1)}}{{search.unit}}
+                </option>
+              {% endfor %}
+            </select>
         {% endif %}
 
+        <!-- あいまい検索 -->
         {% if search.ambiguous %}
           {% with name = search.name_en %}
           {% include "search/search_weight.html" %}

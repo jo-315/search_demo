@@ -60,9 +60,11 @@ create table search
   search_order integer not null,
   search_type integer not null,
   step integer,
+  digit integer,
   unit varchar,
   search_max integer,
   search_min integer,
+  pull_menu_num integer,
   items varchar,
   ambiguous boolean not null
 );

@@ -1,3 +1,4 @@
+import math
 from flask import render_template, request
 from sqlalchemy import and_
 from src import app
@@ -153,15 +154,26 @@ def get_searchs():
                 items.append(eval('result.' + search.name_en))
 
             search.items = ",".join(items)
+
         elif search.search_type == 2:  # プルダウン
-            # 検索に必要な項目を作成
+            # 該当プロパティのmax・minを取得
             results = Home.query.order_by(eval('Home.' + search.name_en)).distinct(eval('Home.' + search.name_en)).all()
 
             min = eval('results[0].' + search.name_en)
             max = eval('results[-1].' + search.name_en)
 
-            search.search_min = min
-            search.search_max = max
+            step = search.step
+
+            # プルダウンのアイテム数を計算 TODO 計算あってるか確認
+            pull_menu_num = math.ceil((max - min)/step + 1)
+
+            search.pull_menu_num = pull_menu_num
+
+            # 表示させるのに最適な値に丸める
+            search.search_min = math.ceil(min/step - 1) * step
+            search.search_max = math.ceil(max/step) * step
+
+            # TODO: 万、億などの桁を丸める
 
     searchs = sorted(searchs, key=lambda x: x.search_order)
 
