@@ -5,7 +5,7 @@
       <div>
         <label for={{search.name_en}}>{{search.name}}</label>
         {% if search.search_type==0 %}
-          テキスト
+          <input type="text" name={{search.name_en}}>
         {% elif search.search_type==1 %}
           ラジオボタン
         {% else %}
