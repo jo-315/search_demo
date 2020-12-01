@@ -143,7 +143,6 @@ def calc_weight(home, name, key, weight):
 def get_searchs():
     searchs = Search.query.all()
 
-    # TODO: 必要な項目に対してqueryよりデータを持ってくる
     for search in searchs:
         if search.search_type == 1:  # ラジオボタン
             # 検索項目に該当するデータを全て取得→ラジオボタンで全て表示できるように
