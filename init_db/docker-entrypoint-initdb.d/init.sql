@@ -72,9 +72,9 @@ create table search
 insert into search(name, name_en, search_order, search_type, ambiguous, step, unit) values
   ('名前', 'name', 0, 0, FALSE, 0,''),
   ('家賃', 'price', 1, 2, TRUE, 5000, '円'),
-  ('住所', 'addres', 2, 1, FALSE, 0, ''),
+  ('住所', 'address', 2, 1, FALSE, 0, ''),
   ('間取り', 'layout', 3, 1, FALSE, 0, ''),
   ('駅からの距離', 'distance', 4, 2, TRUE, 5, '分'),
   ('築年数', 'age', 4, 2, TRUE, 5, '年'),
-  ('構造', 'strcutere',5, 1, FALSE, 0, '')
+  ('構造', 'structure',5, 1, FALSE, 0, '')
 ;

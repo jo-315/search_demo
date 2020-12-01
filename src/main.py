@@ -148,6 +148,11 @@ def get_searchs():
         if search.search_type == 1:  # ラジオボタン
             # 検索項目に該当するデータを全て取得→ラジオボタンで全て表示できるように
             items = []
+            results = Home.query.distinct(eval('Home.' + search.name_en)).all()
+
+            for result in results:
+                items.append(eval('result.' + search.name_en))
+
             search.items = ",".join(items)
         elif search.search_type == 2:  # プルダウン
             # 検索に必要な項目を作成
