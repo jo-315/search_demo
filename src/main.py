@@ -1,4 +1,5 @@
 import math
+import re
 from flask import render_template, request
 from sqlalchemy import and_
 from src import app
@@ -37,27 +38,47 @@ def post():
     # 検索条件をフロントエンドに渡す
     search_conditions = []
 
-    # 確定検索
-    name = request.form.get('name')
-    search_conditions.append(['名前', name]) if name else True
-    address = request.form.get('address')
-    search_conditions.append(['住所', address]) if address else True
-    layout = request.form.getlist('layout')
-    search_conditions.append(['間取り', ' '.join(layout)]) if layout else True
-    structure = request.form.getlist('structure')
-    search_conditions.append(['構造', ' '.join(structure)]) if structure else True
+    # 検索条件をparamsに格納
+    params = []
 
-    result_homes = Home.query.filter(
+    # 重要度を格納
+    weights = []
+
+    # もし名前で検索されていたらここに名前を入れる
+    name = None
+
+    request_items = request.form.to_dict(flat=False)
+    for key in request_items.keys():
+        if (len(request_items[key]) <= 1):
+            value = request_items[key][0]
+            if (value == 'null' or len(value) == 0):
+                continue
+
+            # 名前で検索が行われている場合
+            if (key == 'name'):
+                name = value
+
+            # プルダウンの時は
+
+            if(re.search('.*_weight', key)):  # 重要度の場合
+                # TODO 重要度の格納
+                weights.append(value)
+
+            else:  # 検索条件の場合
+                # TODO: テキストかチェックボックスか判別
+                params.append(eval('Home.' + key + '.in_(["' + value + '"])'))
+
+        else:  # チェックボックスで複数の条件を指定した場合
+            values = request_items[key]
+            params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
+
+    results = Home.query.filter(
         and_(
             Home.name == name if name else True,
-            and_(
-                Home.address == address if address else True,
-                Home.layout.in_(layout) if layout else True,
-                Home.structure.in_(structure) if structure else True
-            )
+            and_(*params)
         )
     ).all()
-    result_num = len(result_homes)
+    result_num = len(results)
 
     if result_num == 0:
         return render_template(
@@ -68,30 +89,30 @@ def post():
             searchs=searchs
         )
 
-    # あいまい検索
-    # hashに変換
-    homes = [{"model": home, "point": 0} for (home) in result_homes]
+    # # あいまい検索
+    # # hashに変換
+    homes = [{"model": home, "point": 0} for (home) in results]
 
-    # 得点の計算 TODO: あいまい検索についてSearchモデルにデータを入れておく
-    for ai_name in ambiguous_items:
-        key = request.form.get(ai_name)
-        weight = request.form.get(ai_name + '_weight')
+    # # 得点の計算 TODO: あいまい検索についてSearchモデルにデータを入れておく
+    # for ai_name in ambiguous_items:
+    #     key = request.form.get(ai_name)
+    #     weight = request.form.get(ai_name + '_weight')
 
-        # 指定がなかった場合は、ポイントを加算する
-        if key == "null":
-            for h in homes:
-                h["point"] += 1
-        # weightが0のときはポイントは加算しない
-        elif not weight == "0":
-            search_conditions.append([
-                ambiguous_item_dict[ai_name],
-                ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])
-            ])
-            for h in homes:
-                h["point"] += calc_weight(h["model"], ai_name, key, weight)
+    #     # 指定がなかった場合は、ポイントを加算する
+    #     if key == "null":
+    #         for h in homes:
+    #             h["point"] += 1
+    #     # weightが0のときはポイントは加算しない
+    #     elif not weight == "0":
+    #         search_conditions.append([
+    #             ambiguous_item_dict[ai_name],
+    #             ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])
+    #         ])
+    #         for h in homes:
+    #             h["point"] += calc_weight(h["model"], ai_name, key, weight)
 
     # 点数の高い順に上から表示できるようにする
-    homes = sorted(homes, key=lambda x: x["point"], reverse=True)
+    # homes = sorted(homes, key=lambda x: x["point"], reverse=True)
 
     # TODO ポイントの規格化（最大は100にする）
 
@@ -145,8 +166,8 @@ def get_searchs():
     searchs = Search.query.all()
 
     for search in searchs:
-        if search.search_type == 1:  # ラジオボタン
-            # 検索項目に該当するデータを全て取得→ラジオボタンで全て表示できるように
+        if search.search_type == 1:  # チェックボックス
+            # 検索項目に該当するデータを全て取得→チェックボックスで全て表示できるように
             items = []
             results = Home.query.distinct(eval('Home.' + search.name_en)).all()
 

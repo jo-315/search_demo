@@ -21,7 +21,7 @@
           {% if search.search_type==0 %}
             <td class="search_condition_table__text">テキスト</td>
           {% elif search.search_type==1 %}
-            <td class="search_condition_table__radio">ラジオボタン</td>
+            <td class="search_condition_table__radio">チェックボックス</td>
           {% else %}
             <td class="search_condition_table__pull">プルダウン</td>
           {% endif %}
@@ -56,7 +56,7 @@
       <label for="search_type">検索タイプ: </label>
       <select name="search_type">
         <option value="text">テキスト</option>
-        <option value="radio">ラジオボタン</option>
+        <option value="radio">チェックボックス</option>
         <option value="pull">プルダウン</option>
       </select>
     </div>

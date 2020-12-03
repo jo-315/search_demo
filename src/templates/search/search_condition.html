@@ -5,19 +5,16 @@
       <div>
         <label for={{search.name_en}}>{{search.name}}</label>
 
-        <!-- テキスト -->
-        {% if search.search_type==0 %}
+        {% if search.search_type==0 %} <!-- テキスト -->
           <input type="text" name={{search.name_en}}>
 
-        <!-- ラジオボタン -->
-        {% elif search.search_type==1 %}
+        {% elif search.search_type==1 %} <!-- チェックボックス -->
           {% for item in search.items.split(',') %}
             <label for={{item}}>{{item}}</label>
-            <input type="checkbox" id={{item}} name="layout" value={{item}}>
+            <input type="checkbox" id={{item}} name={{search.name_en}} value={{item}}>
           {% endfor %}
 
-        <!-- プルダウン -->
-        {% elif search.search_type==2 %}
+        {% elif search.search_type==2 %} <!-- プルダウン -->
             <select name={{search.name_en}}>
               <option value="null">指定なし</option>
               {% for i in range(search.pull_menu_num) %}

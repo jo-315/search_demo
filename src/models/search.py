@@ -1,6 +1,6 @@
 from src.database import db
 
-# search_type: テキスト→0 ラジオボタン→1 プルダウン→2
+# search_type: テキスト→0 チェックボックス→1 プルダウン→2
 
 
 class Search(db.Model):

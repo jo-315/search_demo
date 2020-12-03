@@ -69,7 +69,7 @@ create table search
   ambiguous boolean not null
 );
 
--- search_type テキスト→0 ラジオボタン→1 プルダウン→2
+-- search_type テキスト→0 チェックボックス→1 プルダウン→2
 
 insert into search(name, name_en, search_order, search_type, ambiguous, step, unit) values
   ('名前', 'name', 0, 0, FALSE, 0,''),
