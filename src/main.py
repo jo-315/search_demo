@@ -49,28 +49,35 @@ def post():
 
     request_items = request.form.to_dict(flat=False)
     for key in request_items.keys():
-        if (len(request_items[key]) <= 1):
-            value = request_items[key][0]
-            if (value == 'null' or len(value) == 0):
-                continue
+        if(re.search('.*_weight', key)):  # 重要度の場合
+            # TODO 重要度の格納
+            weights.append(request_items[key])
 
-            # 名前で検索が行われている場合
-            if (key == 'name'):
-                name = value
+        else:  # 検索条件の場合
+            if (len(request_items[key]) <= 1):
 
-            # プルダウンの時は
+                value = request_items[key][0]
 
-            if(re.search('.*_weight', key)):  # 重要度の場合
-                # TODO 重要度の格納
-                weights.append(value)
+                if (value == 'null' or len(value) == 0):
+                    continue
 
-            else:  # 検索条件の場合
-                # TODO: テキストかチェックボックスか判別
-                params.append(eval('Home.' + key + '.in_(["' + value + '"])'))
+                # 名前で検索が行われている場合
+                if (key == 'name'):
+                    name = value
 
-        else:  # チェックボックスで複数の条件を指定した場合
-            values = request_items[key]
-            params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
+                search_type = Search.query.filter(Search.name_en == key).all()[0].search_type
+                if (search_type == 0):  # テキスト
+                    params.append(eval('Home.' + key + '==' + value + ')'))
+
+                elif (search_type == 1):  # チェックボックス
+                    params.append(eval('Home.' + key + '.in_(["' + value + '"])'))
+
+                elif (search_type == 2):  # プルダウン
+                    continue
+
+            else:  # チェックボックスで複数の条件を指定した場合
+                values = request_items[key]
+                params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
 
     results = Home.query.filter(
         and_(
