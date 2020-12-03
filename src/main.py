@@ -98,7 +98,7 @@ def post():
 
     # # あいまい検索
     # # hashに変換
-    homes = [{"model": home, "point": 0} for (home) in results]
+    results = [{"model": result, "point": 0} for (result) in results]
 
     # # 得点の計算 TODO: あいまい検索についてSearchモデルにデータを入れておく
     # for ai_name in ambiguous_items:
@@ -125,7 +125,7 @@ def post():
 
     return render_template(
         "search/index.html",
-        homes=homes,
+        homes=results,
         result_num=result_num,
         search_flag=True,
         search_conditions=search_conditions,
