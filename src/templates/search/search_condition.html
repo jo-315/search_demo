@@ -1,6 +1,5 @@
 <div class="search_condition box">
   <form action="/search" method="POST">
-    <!-- TODO Searchモデルから検索項目を表示できるようにする -->
     {% for search in searchs %}
       <div>
         <label for={{search.name_en}}>{{search.name}}</label>
