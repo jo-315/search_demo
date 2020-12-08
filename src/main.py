@@ -61,6 +61,9 @@ def post():
                 if (value == 'null' or len(value) == 0):
                     continue
 
+                search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
+                search_conditions.append([search_conditions_key, value])
+
                 # 名前で検索が行われている場合
                 if (key == 'name'):
                     name = value
@@ -79,6 +82,9 @@ def post():
                 values = request_items[key]
                 params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
 
+                search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
+                search_conditions.append([search_conditions_key, ' '.join(value)])
+
     results = Home.query.filter(
         and_(
             Home.name == name if name else True,
@@ -96,27 +102,27 @@ def post():
             searchs=searchs
         )
 
-    # # あいまい検索
-    # # hashに変換
+    # あいまい検索
+    # hashに変換
     results = [{"model": result, "point": 0} for (result) in results]
 
-    # # 得点の計算 TODO: あいまい検索についてSearchモデルにデータを入れておく
-    # for ai_name in ambiguous_items:
-    #     key = request.form.get(ai_name)
-    #     weight = request.form.get(ai_name + '_weight')
+    # 得点の計算
+    for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
+        key = 'hoge'
+        weight = 'jhoge'
 
-    #     # 指定がなかった場合は、ポイントを加算する
-    #     if key == "null":
-    #         for h in homes:
-    #             h["point"] += 1
-    #     # weightが0のときはポイントは加算しない
-    #     elif not weight == "0":
-    #         search_conditions.append([
-    #             ambiguous_item_dict[ai_name],
-    #             ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])
-    #         ])
-    #         for h in homes:
-    #             h["point"] += calc_weight(h["model"], ai_name, key, weight)
+        # 指定がなかった場合は、ポイントを加算する
+        # if key == "null":
+        #     for h in homes:
+        #         h["point"] += 1
+        # weightが0のときはポイントは加算しない
+        # elif not weight == "0":
+        #     search_conditions.append([
+        #         ambiguous_item_dict[ai_name],
+        #         ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])
+        #     ])
+        #     for h in homes:
+        #         h["point"] += calc_weight(h["model"], ai_name, key, weight)
 
     # 点数の高い順に上から表示できるようにする
     # homes = sorted(homes, key=lambda x: x["point"], reverse=True)
