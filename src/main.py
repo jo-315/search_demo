@@ -145,8 +145,17 @@ def post():
         if not key:
             continue
 
-        for r in results:
-            r["point"] += calc_ambigious()
+        # 検索タイプで計算方法を変える（プルダウンのみ考える TODO: 別の検索タイプにも対応？？）
+        search_type = get_search_type(key)
+
+        # プルダウン
+        if (search_type == 2):
+
+            # 範囲を取得
+            search_range = get_search_range(key)
+
+            for r in results:
+                r["point"] += calc_ambigious_pull(key, r["model"], search_range)
 
     # 点数の高い順に上から表示できるようにsort
     results = sorted(results, key=lambda x: x["point"], reverse=True)
@@ -192,6 +201,15 @@ def get_search_type(key):
     return Search.query.filter(Search.name_en == key).all()[0].search_type
 
 
+# プルダウンの検索タイプにおいて、検索のレンジを取得する
+def get_search_range(key):
+    search = Search.query.filter(Search.name == key)
+    min = search.search_min
+    max = search.search_max
+    step = search.step
+    return list(range(min, max, step))
+
+
 # 重要度検索
 def calc_weight(weight):
     point = 1
@@ -199,14 +217,11 @@ def calc_weight(weight):
 
 
 # 正規分布を用いてあいまい検索を行う
-def calc_ambigious():
+def calc_ambigious_pull(key, model, sesarch_range):
     point = 1
 
-    # 検索タイプで計算方法を変える（プルダウンのみ考える TODO: 別の検索タイプにも対応？？）
+    # TODO：正規分布に当てはめて、補正係数を取得
 
-    # 検索項目の該当範囲を取得
-
-    # 正規分布に当てはめて、補正係数を取得
     corr_coef = 1
 
     return point * corr_coef
