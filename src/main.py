@@ -51,7 +51,7 @@ def post():
     for key in request_items.keys():
         if(re.search('.*_weight', key)):  # 重要度の場合
             # TODO 重要度の格納
-            weights.append(request_items[key])
+            weights.append([key, request_items[key]])
 
         else:  # 検索条件の場合
             if (len(request_items[key]) <= 1):
@@ -102,27 +102,39 @@ def post():
             searchs=searchs
         )
 
-    # あいまい検索
-    # hashに変換
+    # 重要度の計算 & あいまい検索
+    # hashに変換（ポイントが高いデータが検索によく該当している）
     results = [{"model": result, "point": 0} for (result) in results]
 
-    # 得点の計算
-    for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
-        key = 'hoge'
-        weight = 'jhoge'
+    # ポイントの計算
+    # 重要度の計算
 
-        # 指定がなかった場合は、ポイントを加算する
-        # if key == "null":
-        #     for h in homes:
-        #         h["point"] += 1
+
+    # あいまい検索
+    for ambiguous_item in next(list(filter(lambda x: x.ambiguous, searchs)), None):
+        ambiguous_item_name = ambiguous_item.name
+
+        # search_consitions の中から対象とするあいまい検索の項目を取り出す
+        key = next(filter(lambda x: x[0] == ambiguous_item_name, search_conditions), None)
+
+        # 検索項目に含まれない場合はスキップ
+        if not key:
+            continue
+
+        weight_item = next(filter(lambda x: x[0] == key + '_weight', weights), None)
+        weight = weight_item[1]
+
         # weightが0のときはポイントは加算しない
-        # elif not weight == "0":
-        #     search_conditions.append([
-        #         ambiguous_item_dict[ai_name],
-        #         ' '.join([eval(eval("ai_name + '_label[' + key + ']'")), '重要度', weight, '%'])
-        #     ])
-        #     for h in homes:
-        #         h["point"] += calc_weight(h["model"], ai_name, key, weight)
+        if weight == "0":
+            continue
+
+        search_conditions.append([
+            ambiguous_item_name,
+            ' '.join([key, '重要度', weight, '%'])
+        ])
+
+        # for r in results:
+        #     r["point"] += calc_weight(r["model"], ai_name, key, weight)
 
     # 点数の高い順に上から表示できるようにする
     # homes = sorted(homes, key=lambda x: x["point"], reverse=True)
@@ -173,6 +185,10 @@ def calc_weight(home, name, key, weight):
     point = point * int(weight)/100
 
     return point
+
+
+def calc_ambigious():
+    return
 
 
 def get_searchs():
