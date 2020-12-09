@@ -145,13 +145,14 @@ def post():
         if not key:
             continue
 
-        # for r in results:
-        #     r["point"] += calc_ambiguous(r["model"], ai_name, key, weight)
+        for r in results:
+            r["point"] += calc_ambigious()
 
     # 点数の高い順に上から表示できるようにsort
-    # homes = sorted(homes, key=lambda x: x["point"], reverse=True)
+    results = sorted(results, key=lambda x: x["point"], reverse=True)
 
-    # TODO ポイントの規格化（最大は100にする）
+    # ポイントの規格化（最大は100にする）
+    results = normalize_point(results)
 
     return render_template(
         "search/index.html",
@@ -199,13 +200,20 @@ def calc_weight(weight):
 
 # 正規分布を用いてあいまい検索を行う
 def calc_ambigious():
-    #     # 検索条件との一致度を確認
-    # if (getattr(home, name) > eval(eval("name + '_class[' + key + ']'"))
-    #     and
-    #         getattr(home, name) <= eval(eval("name + '_class[' + str(int(key)+1) + ']'"))):
-    #     point += 1
+    point = 1
 
-    return
+    # 検索タイプで計算方法を変える（プルダウンのみ考える TODO: 別の検索タイプにも対応？？）
+
+    # 検索項目の該当範囲を取得
+
+    # 正規分布に当てはめて、補正係数を取得
+    corr_coef = 1
+
+    return point * corr_coef
+
+
+def normalize_point(hash):
+    return hash
 
 
 # Searchモデルから検索条件の一覧を取得
