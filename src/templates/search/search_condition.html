@@ -2,7 +2,7 @@
   <form action="/search" method="POST">
     {% for search in searchs %}
       <div>
-        <label for={{search.name_en}}>{{search.name}}</label>
+        <label for={{search.name_en}} class="bold">{{search.name}}:</label>
 
         {% if search.search_type==0 %} <!-- テキスト -->
           <input type="text" name={{search.name_en}}>
@@ -24,11 +24,16 @@
             </select>
         {% endif %}
 
-        <!-- あいまい検索 -->
-        {% if search.ambiguous %}
+        <!-- 重要度検索 -->
+        {% if search.weight %}
           {% with name = search.name_en %}
           {% include "search/search_weight.html" %}
           {% endwith %}
+        {% endif %}
+
+        <!-- あいまい検索 -->
+        {% if search.ambiguous %}
+          <p>この検索項目は<b>あいまい検索</b>の対象になっています</p>
         {% endif %}
       </div>
     {% endfor %}

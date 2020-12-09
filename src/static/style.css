@@ -22,6 +22,14 @@
   margin-bottom: 10px;
 }
 
+.search_condition form p{
+  margin-top: 1px;
+}
+
+.search_condition .bold {
+  font-weight: bold;
+}
+
 /* 検索結果表示 */
 .results_list ul{
   padding: 0;
