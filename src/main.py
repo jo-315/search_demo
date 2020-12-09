@@ -25,13 +25,12 @@ def index():
 
 
 # 検索実行method
-# 検索結果はlist型で管理する
 @app.route('/search', methods=['POST'])
 def post():
     # 検索項目の準備
     searchs = get_searchs()
 
-    # 検索条件をフロントエンドに渡す
+    # 検索された項目をフロントエンドに渡す
     search_conditions = []
 
     # 検索条件をparamsに格納
@@ -43,13 +42,28 @@ def post():
     # もし名前で検索されていたらここに名前を入れる
     name = None
 
+    # 検索された項目をフロントエンドから取得
     request_items = request.form.to_dict(flat=False)
+
     for key in request_items.keys():
-        if(re.search('.*_weight', key)):  # 重要度の場合
+        # 重要度の場合
+        if(re.search('.*_weight', key)):
             weights.append([key, request_items[key]])
 
-        else:  # 検索条件の場合
-            if (len(request_items[key]) <= 1):
+        # 検索条件の場合
+        else:
+            # チェックボックスで複数の条件を指定した場合
+            if (len(request_items[key]) > 1):
+
+                values = request_items[key]
+
+                search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
+                search_conditions.append([search_conditions_key, ' '.join(values)])
+
+                params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
+
+            # 指定した条件が一つ
+            else:
 
                 value = request_items[key][0]
 
@@ -73,19 +87,15 @@ def post():
                 elif (search_type == 2):  # プルダウン
                     continue
 
-            else:  # チェックボックスで複数の条件を指定した場合
-                values = request_items[key]
-                params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
-
-                search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
-                search_conditions.append([search_conditions_key, ' '.join(value)])
-
+    # 実際に検索を行う
     results = Home.query.filter(
         and_(
             Home.name == name if name else True,
             and_(*params)
         )
     ).all()
+
+    # ヒット数
     result_num = len(results)
 
     if result_num == 0:
@@ -97,11 +107,11 @@ def post():
             searchs=searchs
         )
 
-    # 重要度の計算 & あいまい検索
+    # 重要度の計算 & あいまい検索 を下で行う
+
     # hashに変換（ポイントが高いデータが検索によく該当している）
     results = [{"model": result, "point": 0} for (result) in results]
 
-    # ポイントの計算
     # 重要度の計算
     for weight_item in next(list(filter(lambda x: x.weight, searchs)), None):
         weight_item_name = weight_item.name
@@ -142,7 +152,7 @@ def post():
         # for r in results:
         #     r["point"] += calc_ambiguous(r["model"], ai_name, key, weight)
 
-    # 点数の高い順に上から表示できるようにする
+    # 点数の高い順に上から表示できるようにsort
     # homes = sorted(homes, key=lambda x: x["point"], reverse=True)
 
     # TODO ポイントの規格化（最大は100にする）
@@ -184,6 +194,7 @@ def find_in_double_list(i, l):
 def get_search_type(key):
     return Search.query.filter(Search.name_en == key).all()[0].search_type
 
+
 # 重要度検索
 def calc_weight(home, name, key, weight):
     point = 0
@@ -210,7 +221,10 @@ def get_searchs():
     searchs = Search.query.all()
 
     for search in searchs:
-        if search.search_type == 1:  # チェックボックス
+
+        # チェックボックス
+        if search.search_type == 1:
+
             # 検索項目に該当するデータを全て取得→チェックボックスで全て表示できるように
             items = []
             results = Home.query.distinct(eval('Home.' + search.name_en)).all()
@@ -220,7 +234,9 @@ def get_searchs():
 
             search.items = ",".join(items)
 
-        elif search.search_type == 2:  # プルダウン
+        # プルダウン
+        elif search.search_type == 2:
+
             # 該当プロパティのmax・minを取得
             results = Home.query.order_by(eval('Home.' + search.name_en)).distinct(eval('Home.' + search.name_en)).all()
 
@@ -229,7 +245,7 @@ def get_searchs():
 
             step = search.step
 
-            # プルダウンのアイテム数を計算 TODO 計算あってるか確認
+            # プルダウンのアイテム数を計算
             pull_menu_num = math.ceil((max - min)/step + 1)
 
             search.pull_menu_num = pull_menu_num
