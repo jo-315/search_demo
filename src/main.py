@@ -151,11 +151,15 @@ def post():
         # プルダウン
         if (search_type == 2):
 
-            # 範囲を取得
-            search_range = get_search_range(key)
+            # 正規分布の計算に必要な値を取得
+            search = Search.query.filter(Search.name == key)
+            min = search.search_min
+            max = search.search_max
+            step = search.step
+            pull_menu_num = get_pull_menu_num(min, max, step)
 
             for r in results:
-                r["point"] += calc_ambigious_pull(key, r["model"], search_range)
+                r["point"] += calc_ambigious_pull(key, r["model"], pull_menu_num)
 
     # 点数の高い順に上から表示できるようにsort
     results = sorted(results, key=lambda x: x["point"], reverse=True)
@@ -201,13 +205,8 @@ def get_search_type(key):
     return Search.query.filter(Search.name_en == key).all()[0].search_type
 
 
-# プルダウンの検索タイプにおいて、検索のレンジを取得する
-def get_search_range(key):
-    search = Search.query.filter(Search.name == key)
-    min = search.search_min
-    max = search.search_max
-    step = search.step
-    return list(range(min, max, step))
+def get_pull_menu_num(min, max, step):
+    return math.ceil((max - min)/step + 1)
 
 
 # 重要度検索
@@ -217,10 +216,11 @@ def calc_weight(weight):
 
 
 # 正規分布を用いてあいまい検索を行う
-def calc_ambigious_pull(key, model, sesarch_range):
+def calc_ambigious_pull(key, model, num):
     point = 1
 
     # TODO：正規分布に当てはめて、補正係数を取得
+    # ave = 
 
     corr_coef = 1
 
@@ -261,9 +261,7 @@ def get_searchs():
             step = search.step
 
             # プルダウンのアイテム数を計算
-            pull_menu_num = math.ceil((max - min)/step + 1)
-
-            search.pull_menu_num = pull_menu_num
+            search.pull_menu_num = get_pull_menu_num(min, max, step)
 
             # 表示させるのに最適な値に丸める
             search.search_min = math.ceil(min/step - 1) * step
