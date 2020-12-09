@@ -11,6 +11,8 @@
         <td>検索タイプ</td>
         <td>最小単位</td>
         <td>単位</td>
+        <td>重要度検索</td>
+        <td>あいまい検索</td>
       </tr>
     </thead>
     <tbody>
@@ -36,6 +38,18 @@
             <td>{{search.unit}}</td>
           {% else %}
             <td></td>
+          {% endif %}
+
+          {% if search.weight %}
+            <td>あり</td>
+          {% else %}
+            <td>なし</td>
+          {% endif %}
+
+          {% if search.ambiguous %}
+            <td>あり</td>
+          {% else %}
+            <td>なし</td>
           {% endif %}
 
           <td>変更</td>

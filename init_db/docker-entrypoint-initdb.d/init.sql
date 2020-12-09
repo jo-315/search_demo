@@ -66,17 +66,18 @@ create table search
   search_min integer,
   pull_menu_num integer,
   items varchar,
-  ambiguous boolean not null
+  ambiguous boolean not null,
+  weight boolean not null
 );
 
 -- search_type テキスト→0 チェックボックス→1 プルダウン→2
 
-insert into search(name, name_en, search_order, search_type, ambiguous, step, unit) values
-  ('名前', 'name', 0, 0, FALSE, 0,''),
-  ('家賃', 'price', 1, 2, TRUE, 5000, '円'),
-  ('住所', 'address', 2, 1, FALSE, 0, ''),
-  ('間取り', 'layout', 3, 1, FALSE, 0, ''),
-  ('駅からの距離', 'station_distance', 4, 2, TRUE, 5, '分'),
-  ('築年数', 'age', 4, 2, TRUE, 5, '年'),
-  ('構造', 'structure',5, 1, FALSE, 0, '')
+insert into search(name, name_en, search_order, search_type, ambiguous, weight, step, unit) values
+  ('名前', 'name', 0, 0, FALSE, FALSE, 0,''),
+  ('家賃', 'price', 1, 2, TRUE, TRUE, 5000, '円'),
+  ('住所', 'address', 2, 1, FALSE, FALSE, 0, ''),
+  ('間取り', 'layout', 3, 1, FALSE, FALSE, 0, ''),
+  ('駅からの距離', 'station_distance', 4, 2, TRUE, TRUE, 5, '分'),
+  ('築年数', 'age', 4, 2, TRUE, TRUE, 5, '年'),
+  ('構造', 'structure',5, 1, FALSE, FALSE, 0, '')
 ;
