@@ -113,7 +113,7 @@ def post():
     results = [{"model": result, "point": 0} for (result) in results]
 
     # 重要度の計算
-    for weight_item in next(list(filter(lambda x: x.weight, searchs)), None):
+    for weight_item in list(filter(lambda x: x.weight, searchs)):
         weight_item_name = weight_item.name
 
         # search_consitions の中から対象とする重要度検索の項目を取り出す
@@ -139,7 +139,7 @@ def post():
         #     r["point"] += calc_weight(r["model"], ai_name, key, weight)
 
     # あいまい検索
-    for ambiguous_item in next(list(filter(lambda x: x.ambiguous, searchs)), None):
+    for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
         ambiguous_item_name = ambiguous_item.name
 
         # search_consitions の中から対象とするあいまい検索の項目を取り出す
