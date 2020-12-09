@@ -135,8 +135,8 @@ def post():
             ' '.join([key, '重要度', weight, '%'])
         ])
 
-        # for r in results:
-        #     r["point"] += calc_weight(r["model"], ai_name, key, weight)
+        for r in results:
+            r["point"] += calc_weight(r["model"], weight)
 
     # あいまい検索
     for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
@@ -196,23 +196,19 @@ def get_search_type(key):
 
 
 # 重要度検索
-def calc_weight(home, name, key, weight):
-    point = 0
-
-    # 検索条件との一致度を確認
-    if (getattr(home, name) > eval(eval("name + '_class[' + key + ']'"))
-        and
-            getattr(home, name) <= eval(eval("name + '_class[' + str(int(key)+1) + ']'"))):
-        point += 1
-
-    # 重み付け処理
-    point = point * int(weight)/100
-
-    return point
+def calc_weight(weight):
+    point = 1
+    return point * int(weight)/100
 
 
 # 正規分布を用いてあいまい検索を行う
 def calc_ambigious():
+    #     # 検索条件との一致度を確認
+    # if (getattr(home, name) > eval(eval("name + '_class[' + key + ']'"))
+    #     and
+    #         getattr(home, name) <= eval(eval("name + '_class[' + str(int(key)+1) + ']'"))):
+    #     point += 1
+
     return
 
 
