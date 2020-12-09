@@ -8,16 +8,16 @@ from src.models import Home, Search
 # 最初の検索画面
 @app.route('/', methods=['GET'])
 def index():
-    # Homeモデルの総数
-    homes = Home.query.all()
-    result_num = len(homes)
+    # モデルの総数
+    results = Home.query.all()
+    result_num = len(results)
 
     # 検索項目の準備
     searchs = get_searchs()
 
     return render_template(
         "search/index.html",
-        homes=homes,
+        results=results,
         result_num=result_num,
         search_flag=False,
         searchs=searchs
@@ -101,7 +101,7 @@ def post():
     if result_num == 0:
         return render_template(
             "search/index.html",
-            homes=[],
+            results=[],
             result_num=result_num,
             search_flag=True,
             searchs=searchs
@@ -156,7 +156,7 @@ def post():
 
     return render_template(
         "search/index.html",
-        homes=results,
+        results=results,
         result_num=result_num,
         search_flag=True,
         search_conditions=search_conditions,

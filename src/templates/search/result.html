@@ -11,18 +11,18 @@
   </div>
   <div class="results_list">
     <ul>
-      {% for home in homes %}
+      {% for result in results %}
       <li class="box">
-        <p class="result_item_name">{{home['model'].name}}</p>
-        <p>マッチ度:{{home['point']}}</p>
+        <p class="result_item_name">{{result['model'].name}}</p>
+        <p>マッチ度:{{result['point']}}</p>
         <div>
           <!-- TODO searchモデルのデータを使う -->
-          <p>値段：{{home['model'].price/10000}}万円</p>
-          <p>住所：{{home['model'].address}}</p>
-          <p>間取り：{{home['model'].layout}}</p>
-          <p>駅からの距離：{{home['model'].station_distance}}分</p>
-          <p>築年数：{{home['model'].age}}年</p>
-          <p>構造：{{home['model'].structure}}</p>
+          <p>値段：{{result['model'].price/10000}}万円</p>
+          <p>住所：{{result['model'].address}}</p>
+          <p>間取り：{{result['model'].layout}}</p>
+          <p>駅からの距離：{{result['model'].station_distance}}分</p>
+          <p>築年数：{{result['model'].age}}年</p>
+          <p>構造：{{result['model'].structure}}</p>
         </div>
       </li>
       {% endfor %}
