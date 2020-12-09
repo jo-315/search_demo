@@ -126,10 +126,6 @@ def post():
         weight_item = find_in_double_list(key + '_weight', weights)
         weight = weight_item[1]
 
-        # weightが0のときはポイントは加算しない
-        if weight == "0":
-            continue
-
         search_conditions.append([
             weight_item_name,
             ' '.join([key, '重要度', weight, '%'])
