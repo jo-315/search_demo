@@ -5,10 +5,6 @@ from sqlalchemy import and_
 from src import app
 from src.models import Home, Search
 
-# あいまい検索用のconst
-ambiguous_items = ["price", "station_distance", "age"]
-ambiguous_item_dict = {"price": "値段", "station_distance": "駅までの距離", "age": "築年数"}
-
 # 最初の検索画面
 @app.route('/', methods=['GET'])
 def index():
@@ -50,7 +46,6 @@ def post():
     request_items = request.form.to_dict(flat=False)
     for key in request_items.keys():
         if(re.search('.*_weight', key)):  # 重要度の場合
-            # TODO 重要度の格納
             weights.append([key, request_items[key]])
 
         else:  # 検索条件の場合
@@ -68,7 +63,7 @@ def post():
                 if (key == 'name'):
                     name = value
 
-                search_type = Search.query.filter(Search.name_en == key).all()[0].search_type
+                search_type = get_search_type(key)
                 if (search_type == 0):  # テキスト
                     params.append(eval('Home.' + key + '==' + value + ')'))
 
@@ -108,20 +103,17 @@ def post():
 
     # ポイントの計算
     # 重要度の計算
+    for weight_item in next(list(filter(lambda x: x.weight, searchs)), None):
+        weight_item_name = weight_item.name
 
-
-    # あいまい検索
-    for ambiguous_item in next(list(filter(lambda x: x.ambiguous, searchs)), None):
-        ambiguous_item_name = ambiguous_item.name
-
-        # search_consitions の中から対象とするあいまい検索の項目を取り出す
-        key = next(filter(lambda x: x[0] == ambiguous_item_name, search_conditions), None)
+        # search_consitions の中から対象とする重要度検索の項目を取り出す
+        key = find_in_double_list(weight_item_name, search_conditions)
 
         # 検索項目に含まれない場合はスキップ
         if not key:
             continue
 
-        weight_item = next(filter(lambda x: x[0] == key + '_weight', weights), None)
+        weight_item = find_in_double_list(key + '_weight', weights)
         weight = weight_item[1]
 
         # weightが0のときはポイントは加算しない
@@ -129,12 +121,26 @@ def post():
             continue
 
         search_conditions.append([
-            ambiguous_item_name,
+            weight_item_name,
             ' '.join([key, '重要度', weight, '%'])
         ])
 
         # for r in results:
         #     r["point"] += calc_weight(r["model"], ai_name, key, weight)
+
+    # あいまい検索
+    for ambiguous_item in next(list(filter(lambda x: x.ambiguous, searchs)), None):
+        ambiguous_item_name = ambiguous_item.name
+
+        # search_consitions の中から対象とするあいまい検索の項目を取り出す
+        key = find_in_double_list(ambiguous_item_name, search_conditions)
+
+        # 検索項目に含まれない場合はスキップ
+        if not key:
+            continue
+
+        # for r in results:
+        #     r["point"] += calc_ambiguous(r["model"], ai_name, key, weight)
 
     # 点数の高い順に上から表示できるようにする
     # homes = sorted(homes, key=lambda x: x["point"], reverse=True)
@@ -171,7 +177,14 @@ def csv():
 
 
 # --- methodの切り出し --- #
+def find_in_double_list(i, l):
+    return next(filter(lambda x: x[0] == i, l), None)
 
+
+def get_search_type(key):
+    return Search.query.filter(Search.name_en == key).all()[0].search_type
+
+# 重要度検索
 def calc_weight(home, name, key, weight):
     point = 0
 
@@ -187,10 +200,12 @@ def calc_weight(home, name, key, weight):
     return point
 
 
+# 正規分布を用いてあいまい検索を行う
 def calc_ambigious():
     return
 
 
+# Searchモデルから検索条件の一覧を取得
 def get_searchs():
     searchs = Search.query.all()
 
