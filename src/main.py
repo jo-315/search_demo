@@ -1,4 +1,5 @@
 import math
+from scipy.stats import norm
 import re
 from flask import render_template, request
 from sqlalchemy import and_
@@ -219,10 +220,14 @@ def calc_weight(weight):
 def calc_ambigious_pull(key, model, num):
     point = 1
 
-    # TODO：正規分布に当てはめて、補正係数を取得
-    # ave = 
+    # 該当データの値を取得
+    # model.key
 
-    corr_coef = 1
+    # TODO：正規分布に当てはめて、補正係数を取得
+    # loc
+    # scale
+
+    corr_coef = norm.pdf(x=1, loc=loc, scale=scale)
 
     return point * corr_coef
 
