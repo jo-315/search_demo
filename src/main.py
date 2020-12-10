@@ -239,6 +239,17 @@ def calc_ambigious_pull(key, model, num, point):
 
 
 def normalize_point(hash):
+    max_point = hash[0]["point"]
+
+    # あいまい検索が行われなかった場合は、全てのポイントが0なので代わりに100を代入する
+    if max_point == 0:
+        for h in hash:
+            h["point"] = 100
+    else:
+        for h in hash:
+            # 規格化
+            h["point"] = h["point"] / max_point * 100
+
     return hash
 
 
