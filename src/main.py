@@ -50,7 +50,7 @@ def post():
     for key in request_items.keys():
         # 重要度の場合
         if(re.search('.*_weight', key)):
-            weights.append([key, request_items[key]])
+            weights.append([key, request_items[key][0]])
 
         # 検索条件の場合
         else:
@@ -112,60 +112,62 @@ def post():
     # 重要度の計算 & あいまい検索 を下で行う
 
     # hashに変換（ポイントが高いデータが検索によく該当している）
-    results = [{"model": result, "point": 0, "tmp": None} for (result) in results]
+    results = [{"model": result, "point": 0, "tmp": -1} for (result) in results]
 
     # 重要度の計算
     for weight_item in list(filter(lambda x: x.weight, searchs)):
         weight_item_name = weight_item.name
 
         # search_consitions の中から対象とする重要度検索の項目を取り出す
-        key = find_in_double_list(weight_item_name, search_conditions)
+        key_list = find_in_double_list(weight_item_name, search_conditions)
 
         # 検索項目に含まれない場合はスキップ
-        if not key:
+        if not key_list:
             continue
 
-        weight_item = find_in_double_list(key + '_weight', weights)
+        weight_item = find_in_double_list(weight_item.name_en + '_weight', weights)
         weight = weight_item[1]
 
         search_conditions.append([
             weight_item_name,
-            ' '.join([key, '重要度', weight, '%'])
+            ' '.join([weight_item_name, '重要度', weight, '%'])
         ])
 
         for r in results:
-            r["tmp"] += calc_weight(r["model"], weight)
+            r["tmp"] = calc_weight(weight)
 
     # あいまい検索
     for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
         ambiguous_item_name = ambiguous_item.name
 
         # search_consitions の中から対象とするあいまい検索の項目を取り出す
-        key = find_in_double_list(ambiguous_item_name, search_conditions)
+        key_list = find_in_double_list(ambiguous_item_name, search_conditions)
 
         # 検索項目に含まれない場合はスキップ
-        if not key:
+        if not key_list:
             continue
 
+        key = key_list[0]
+
         # 検索タイプで計算方法を変える（プルダウンのみ考える TODO: 別の検索タイプにも対応？？）
-        search_type = get_search_type(key)
+        search_type = get_search_type(ambiguous_item.name_en)
 
         # プルダウン
         if (search_type == 2):
 
             # 正規分布の計算に必要な値を取得
-            search = Search.query.filter(Search.name == key)
+            search = Search.query.filter(Search.name == key).all()[0]
             min = search.search_min
             max = search.search_max
             step = search.step
             pull_menu_num = get_pull_menu_num(min, max, step)
 
             for r in results:
-                if not r["tmp"]:
+                if r["tmp"] < 0:
                     point = 1
                 else:
                     point = r["tmp"]
-                    r["tmp"] = None
+                    r["tmp"] = -1
 
                 r["point"] += calc_ambigious_pull(key, r["model"], pull_menu_num, point)
 
@@ -220,7 +222,7 @@ def get_pull_menu_num(min, max, step):
 # 重要度検索
 def calc_weight(weight):
     point = 1
-    return point * int(weight)/100
+    return round(point * int(weight)/100)
 
 
 # 正規分布を用いてあいまい検索を行う
@@ -235,7 +237,7 @@ def calc_ambigious_pull(key, model, num, point):
     scale = stdev(seq)
     corr_coef = norm.pdf(x=x, loc=loc, scale=scale)
 
-    return point * corr_coef
+    return round(point * corr_coef)
 
 
 def normalize_point(hash):
