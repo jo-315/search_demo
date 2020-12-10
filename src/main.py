@@ -1,5 +1,6 @@
 import math
 from scipy.stats import norm
+from statistics import mean, stdev
 import re
 from flask import render_template, request
 from sqlalchemy import and_
@@ -222,12 +223,13 @@ def calc_ambigious_pull(key, model, num):
 
     # 該当データの値を取得
     # model.key
+    x = 0
 
-    # TODO：正規分布に当てはめて、補正係数を取得
-    # loc
-    # scale
-
-    corr_coef = norm.pdf(x=1, loc=loc, scale=scale)
+    # 正規分布に当てはめて、補正係数を取得
+    seq = range(num)
+    loc = mean(seq)
+    scale = stdev(seq)
+    corr_coef = norm.pdf(x=x, loc=loc, scale=scale)
 
     return point * corr_coef
 
