@@ -6,7 +6,7 @@
   <div class="search_condition box">
     <h3>検索条件</h3>
     {% for search_condition in search_conditions %}
-      <p class="inline underline">{{search_condition[0]}}:{{search_condition[1]}}</p>
+      <p class="inline underline">{{search_condition[0]}}: {{' '.join(search_condition[1:])}}</p>
     {% endfor %}
   </div>
   <div class="results_list">

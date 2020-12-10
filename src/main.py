@@ -128,10 +128,7 @@ def post():
         weight_item = find_in_double_list(weight_item.name_en + '_weight', weights)
         weight = weight_item[1]
 
-        search_conditions.append([
-            weight_item_name,
-            ' '.join([weight_item_name, '重要度', weight, '%'])
-        ])
+        list(filter(lambda x: x[0] == weight_item_name, search_conditions))[0].append(' '.join(['重要度', weight, '%']))
 
         for r in results:
             r["tmp"] = calc_weight(weight)
