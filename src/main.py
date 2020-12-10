@@ -169,7 +169,7 @@ def post():
                     point = r["tmp"]
                     r["tmp"] = -1
 
-                r["point"] += calc_ambigious_pull(key, r["model"], pull_menu_num, point)
+                r["point"] += calc_ambigious_pull(ambiguous_item.name_en, r["model"], pull_menu_num, point)
 
     # 点数の高い順に上から表示できるようにsort
     results = sorted(results, key=lambda x: x["point"], reverse=True)
@@ -222,14 +222,13 @@ def get_pull_menu_num(min, max, step):
 # 重要度検索
 def calc_weight(weight):
     point = 1
-    return round(point * int(weight)/100)
+    return point * int(weight)/100
 
 
 # 正規分布を用いてあいまい検索を行う
 def calc_ambigious_pull(key, model, num, point):
     # 該当データの値を取得
-    # model.key
-    x = 0
+    x = eval("model" + '.' + eval("key"))
 
     # 正規分布に当てはめて、補正係数を取得
     seq = range(num)
@@ -237,7 +236,7 @@ def calc_ambigious_pull(key, model, num, point):
     scale = stdev(seq)
     corr_coef = norm.pdf(x=x, loc=loc, scale=scale)
 
-    return round(point * corr_coef)
+    return point * corr_coef
 
 
 def normalize_point(hash):
@@ -250,7 +249,7 @@ def normalize_point(hash):
     else:
         for h in hash:
             # 規格化
-            h["point"] = h["point"] / max_point * 100
+            h["point"] = round(h["point"] / max_point * 100)
 
     return hash
 
