@@ -72,22 +72,35 @@ def post():
                 if (value == 'null' or len(value) == 0):
                     continue
 
-                search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
-                search_conditions.append([search_conditions_key, value])
-
                 # 名前で検索が行われている場合
                 if (key == 'name'):
                     name = value
 
                 search_type = get_search_type(key)
-                if (search_type == 0):  # テキスト
+
+                # テキスト
+                if (search_type == 0):
                     params.append(eval('Home.' + key + '==' + value + ')'))
 
-                elif (search_type == 1):  # チェックボックス
+                    search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
+                    search_conditions.append([search_conditions_key, value])
+
+                # チェックボックス
+                elif (search_type == 1):
                     params.append(eval('Home.' + key + '.in_(["' + value + '"])'))
 
-                elif (search_type == 2):  # プルダウン
-                    continue
+                    search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
+                    search_conditions.append([search_conditions_key, value])
+
+                # プルダウン
+                elif (search_type == 2):
+                    search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
+                    search = Search.query.filter(Search.name_en == key).all()[0]
+                    value = str(int(search.search_min) + int(search.step) * int(value)) \
+                        + '~' \
+                        + str(int(search.search_min) + int(search.step) * (int(value)+1)) \
+                        + search.unit
+                    search_conditions.append([search_conditions_key, value])
 
     # 実際に検索を行う
     results = Home.query.filter(
