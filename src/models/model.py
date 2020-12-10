@@ -2,7 +2,7 @@ from src.database import db
 # from src.models import Search
 
 
-class Home(db.Model):
+class Model(db.Model):
     # searchs = Search.query.all()
     # for search in searchs:
     #     ''.format(search.name) = db.Column(db.String(255), nullable=False)

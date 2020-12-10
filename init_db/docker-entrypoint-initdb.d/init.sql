@@ -1,6 +1,6 @@
 set client_encoding = 'UTF8';
 
-create table home
+create table model
 (
   id serial primary key,
   name varchar not null,
@@ -12,7 +12,7 @@ create table home
   structure varchar not null
 );
 
-insert into home(name, price, address, layout, station_distance, age, structure) values
+insert into model(name, price, address, layout, station_distance, age, structure) values
   ('コーポ京都', 80000, '京都府京都市', '1DK', 2, 15, '鉄筋系'),
   ('京都苑', 70000, '京都府京都市', '1DK', 12, 5, '鉄筋系'),
   ('かきく京都', 65000, '京都府京都市', '1K', 22, 4, '鉄筋系'),

@@ -5,13 +5,13 @@ import re
 from flask import render_template, request
 from sqlalchemy import and_
 from src import app
-from src.models import Home, Search
+from src.models import Model, Search
 
 # 最初の検索画面
 @app.route('/', methods=['GET'])
 def index():
     # モデルの総数
-    results = Home.query.all()
+    results = Model.query.all()
     result_num = len(results)
 
     # 検索項目の準備
@@ -62,7 +62,7 @@ def post():
                 search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
                 search_conditions.append([search_conditions_key, ' '.join(values)])
 
-                params.append(eval('Home.' + key + '.in_(' + str(values) + ')'))
+                params.append(eval('Model.' + key + '.in_(' + str(values) + ')'))
 
             # 指定した条件が一つ
             else:
@@ -80,14 +80,14 @@ def post():
 
                 # テキスト
                 if (search_type == 0):
-                    params.append(eval('Home.' + key + '==' + value + ')'))
+                    params.append(eval('Model.' + key + '==' + value + ')'))
 
                     search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
                     search_conditions.append([search_conditions_key, value])
 
                 # チェックボックス
                 elif (search_type == 1):
-                    params.append(eval('Home.' + key + '.in_(["' + value + '"])'))
+                    params.append(eval('Model.' + key + '.in_(["' + value + '"])'))
 
                     search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
                     search_conditions.append([search_conditions_key, value])
@@ -103,9 +103,9 @@ def post():
                     search_conditions.append([search_conditions_key, value])
 
     # 実際に検索を行う
-    results = Home.query.filter(
+    results = Model.query.filter(
         and_(
-            Home.name == name if name else True,
+            Model.name == name if name else True,
             and_(*params)
         )
     ).all()
@@ -278,7 +278,7 @@ def get_searchs():
 
             # 検索項目に該当するデータを全て取得→チェックボックスで全て表示できるように
             items = []
-            results = Home.query.distinct(eval('Home.' + search.name_en)).all()
+            results = Model.query.distinct(eval('Model.' + search.name_en)).all()
 
             for result in results:
                 items.append(eval('result.' + search.name_en))
@@ -289,7 +289,7 @@ def get_searchs():
         elif search.search_type == 2:
 
             # 該当プロパティのmax・minを取得
-            results = Home.query.order_by(eval('Home.' + search.name_en)).distinct(eval('Home.' + search.name_en)).all()
+            results = Model.query.order_by(eval('Model.' + search.name_en)).distinct(eval('Model.' + search.name_en)).all()
 
             min = eval('results[0].' + search.name_en)
             max = eval('results[-1].' + search.name_en)
