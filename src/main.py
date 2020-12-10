@@ -1,6 +1,6 @@
 import math
 from scipy.stats import norm
-from statistics import mean, stdev
+from statistics import stdev
 import re
 from flask import render_template, request
 from sqlalchemy import and_
@@ -171,6 +171,11 @@ def post():
             max = search.search_max
             step = search.step
             pull_menu_num = get_pull_menu_num(min, max, step)
+            seq = range(pull_menu_num)
+            scale = stdev(seq)
+
+            # 検索された項目を取得（正規分布の平均にする）
+            loc = float(request.form[ambiguous_item.name_en])
 
             for r in results:
                 if r["tmp"] < 0:
@@ -179,7 +184,10 @@ def post():
                     point = r["tmp"]
                     r["tmp"] = -1
 
-                r["point"] += calc_ambigious_pull(ambiguous_item.name_en, r["model"], pull_menu_num, point)
+                # モデルの持つ該当データの値を取得
+                x = (eval("r['model']" + '.' + eval("ambiguous_item.name_en")) - min) / step
+
+                r["point"] += calc_ambigious_pull(x, loc, scale, point)
 
     # 点数の高い順に上から表示できるようにsort
     results = sorted(results, key=lambda x: x["point"], reverse=True)
@@ -236,14 +244,9 @@ def calc_weight(weight):
 
 
 # 正規分布を用いてあいまい検索を行う
-def calc_ambigious_pull(key, model, num, point):
-    # 該当データの値を取得
-    x = eval("model" + '.' + eval("key"))
+def calc_ambigious_pull(x, loc, scale, point):
 
     # 正規分布に当てはめて、補正係数を取得
-    seq = range(num)
-    loc = mean(seq)
-    scale = stdev(seq)
     corr_coef = norm.pdf(x=x, loc=loc, scale=scale)
 
     return point * corr_coef
@@ -297,7 +300,7 @@ def get_searchs():
             search.pull_menu_num = get_pull_menu_num(min, max, step)
 
             # 表示させるのに最適な値に丸める
-            search.search_min = math.ceil(min/step - 1) * step
+            search.search_min = math.floor(min/step) * step
             search.search_max = math.ceil(max/step) * step
 
             # TODO: 万、億などの桁を丸める
