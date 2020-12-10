@@ -112,7 +112,7 @@ def post():
     # 重要度の計算 & あいまい検索 を下で行う
 
     # hashに変換（ポイントが高いデータが検索によく該当している）
-    results = [{"model": result, "point": 0} for (result) in results]
+    results = [{"model": result, "point": 0, "tmp": None} for (result) in results]
 
     # 重要度の計算
     for weight_item in list(filter(lambda x: x.weight, searchs)):
@@ -134,7 +134,7 @@ def post():
         ])
 
         for r in results:
-            r["point"] += calc_weight(r["model"], weight)
+            r["tmp"] += calc_weight(r["model"], weight)
 
     # あいまい検索
     for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
@@ -161,7 +161,13 @@ def post():
             pull_menu_num = get_pull_menu_num(min, max, step)
 
             for r in results:
-                r["point"] += calc_ambigious_pull(key, r["model"], pull_menu_num)
+                if not r["tmp"]:
+                    point = 1
+                else:
+                    point = r["tmp"]
+                    r["tmp"] = None
+
+                r["point"] += calc_ambigious_pull(key, r["model"], pull_menu_num, point)
 
     # 点数の高い順に上から表示できるようにsort
     results = sorted(results, key=lambda x: x["point"], reverse=True)
@@ -218,9 +224,7 @@ def calc_weight(weight):
 
 
 # 正規分布を用いてあいまい検索を行う
-def calc_ambigious_pull(key, model, num):
-    point = 1
-
+def calc_ambigious_pull(key, model, num, point):
     # 該当データの値を取得
     # model.key
     x = 0
