@@ -33,12 +33,14 @@ def post():
     searchs = get_searchs()
 
     # 検索された項目をフロントエンドに渡す
+    # {key(日本語): value1（検索項目）, value2(重要度)}
     search_conditions = []
 
     # 検索条件をparamsに格納
     params = []
 
     # 重要度を格納
+    # [[key_en1, value1], ...]
     weights = []
 
     # もし名前で検索されていたらここに名前を入れる
@@ -47,60 +49,63 @@ def post():
     # 検索された項目をフロントエンドから取得
     request_items = request.form.to_dict(flat=False)
 
-    for key in request_items.keys():
+    for key_en in request_items.keys():
         # 重要度の場合
-        if(re.search('.*_weight', key)):
-            weights.append([key, request_items[key][0]])
+        if(re.search('.*_weight', key_en)):
+            weights.append([key_en, request_items[key_en][0]])
 
         # 検索条件の場合
         else:
             # チェックボックスで複数の条件を指定した場合
-            if (len(request_items[key]) > 1):
+            if (len(request_items[key_en]) > 1):
 
-                values = request_items[key]
+                # 複数の値を取得するために `request_items` を使う
+                values = request_items[key_en]
 
-                search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
-                search_conditions.append([search_conditions_key, ' '.join(values)])
+                search_conditions.append([
+                    get_search_conditions_key_name(searchs, key_en),
+                    ' '.join(values)
+                    ])
 
-                params.append(eval('Model.' + key + '.in_(' + str(values) + ')'))
+                params.append(eval('Model.' + key_en + '.in_(' + str(values) + ')'))
 
             # 指定した条件が一つ
             else:
 
-                value = request_items[key][0]
+                value = request_items[key_en][0]
 
+                # 検索が行われなかった場合
                 if (value == 'null' or len(value) == 0):
                     continue
 
                 # 名前で検索が行われている場合
-                if (key == 'name'):
+                if (key_en == 'name'):
                     name = value
 
-                search_type = get_search_type(key)
+                # 検索タイプで分岐処理
+                search_type = get_search_type(key_en)
 
-                # テキスト
-                if (search_type == 0):
-                    params.append(eval('Model.' + key + '==' + value + ')'))
+                # テキスト or チェックボックス
+                if (search_type == 0 or search_type == 1):
+                    # queryに利用
+                    params.append(eval('Model.' + key_en + '==' + value + ')'))
 
-                    search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
-                    search_conditions.append([search_conditions_key, value])
-
-                # チェックボックス
-                elif (search_type == 1):
-                    params.append(eval('Model.' + key + '.in_(["' + value + '"])'))
-
-                    search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
-                    search_conditions.append([search_conditions_key, value])
+                    # フロントで表示用の配列にappend
+                    search_conditions.append([
+                        get_search_conditions_key_name(searchs, key_en),
+                        value
+                    ])
 
                 # プルダウン
                 elif (search_type == 2):
-                    search_conditions_key = list(filter(lambda x: x.name_en == key, searchs))[0].name
-                    search = Search.query.filter(Search.name_en == key).all()[0]
+                    # フロントで表示用に指定範囲を取得
+                    search_conditions_key_name = get_search_conditions_key_name(searchs, key_en)
+                    search = Search.query.filter(Search.name_en == key_en).all()[0]
                     value = str(int(search.search_min) + int(search.step) * int(value)) \
                         + '~' \
                         + str(int(search.search_min) + int(search.step) * (int(value)+1)) \
                         + search.unit
-                    search_conditions.append([search_conditions_key, value])
+                    search_conditions.append([search_conditions_key_name, value])
 
     # 実際に検索を行う
     results = Model.query.filter(
@@ -130,46 +135,46 @@ def post():
     # 重要度の計算
     for weight_item in list(filter(lambda x: x.weight, searchs)):
         weight_item_name = weight_item.name
+        weight_item_name_en = weight_item.name_en
 
-        # search_consitions の中から対象とする重要度検索の項目を取り出す
+        # 検索項目に含まれない場合はスキップ(search_consitions の中に格納されているかどうか)
         key_list = find_in_double_list(weight_item_name, search_conditions)
-
-        # 検索項目に含まれない場合はスキップ
         if not key_list:
             continue
 
-        weight_item = find_in_double_list(weight_item.name_en + '_weight', weights)
+        weight_item = find_in_double_list(weight_item_name_en + '_weight', weights)
         weight = weight_item[1]
 
+        # search_conditionsに重要度を格納
         list(filter(lambda x: x[0] == weight_item_name, search_conditions))[0].append(' '.join(['重要度', weight, '%']))
 
+        # あいまい検索のために一度tmpに格納 TODO: あいまい検索しない場合の実装
         for r in results:
             r["tmp"] = calc_weight(weight)
 
     # あいまい検索
     for ambiguous_item in list(filter(lambda x: x.ambiguous, searchs)):
         ambiguous_item_name = ambiguous_item.name
-
-        # search_consitions の中から対象とするあいまい検索の項目を取り出す
-        key_list = find_in_double_list(ambiguous_item_name, search_conditions)
+        ambiguous_item_name_en = ambiguous_item.name_en
 
         # 検索項目に含まれない場合はスキップ
+        key_list = find_in_double_list(ambiguous_item_name, search_conditions)
         if not key_list:
             continue
 
-        key = key_list[0]
-
         # 検索タイプで計算方法を変える（プルダウンのみ考える TODO: 別の検索タイプにも対応？？）
-        search_type = get_search_type(ambiguous_item.name_en)
+        search_type = get_search_type(ambiguous_item_name_en.name_en)
 
         # プルダウン
         if (search_type == 2):
 
             # 正規分布の計算に必要な値を取得
-            search = Search.query.filter(Search.name == key).all()[0]
+            search = Search.query.filter(Search.name == key_list[0]).all()[0]
             min = search.search_min
             max = search.search_max
             step = search.step
+
+            # 標準偏差の計算
             pull_menu_num = get_pull_menu_num(min, max, step)
             seq = range(pull_menu_num)
             scale = stdev(seq)
@@ -185,7 +190,7 @@ def post():
                     r["tmp"] = -1
 
                 # モデルの持つ該当データの値を取得
-                x = (eval("r['model']" + '.' + eval("ambiguous_item.name_en")) - min) / step
+                x = (eval("r['model']" + '.' + eval("ambiguous_item_name_en")) - min) / step
 
                 r["point"] += calc_ambigious_pull(x, loc, scale, point)
 
@@ -235,6 +240,10 @@ def get_search_type(key):
 
 def get_pull_menu_num(min, max, step):
     return math.ceil((max - min)/step + 1)
+
+
+def get_search_conditions_key_name(searchs, key_en):
+    return list(filter(lambda x: x.name_en == key_en, searchs))[0].name
 
 
 # 重要度検索
