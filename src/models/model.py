@@ -1,11 +1,13 @@
+from sqlalchemy import MetaData
 from src.database import db
-# from src.models import Search
 
+# metadata = MetaData()
+# print(db)
 
 class Model(db.Model):
-    # searchs = Search.query.all()
+    # searchs = db.Search.query.all()
     # for search in searchs:
-    #     ''.format(search.name) = db.Column(db.String(255), nullable=False)
+    #     search.name = db.Column(db.String(255), nullable=False)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
