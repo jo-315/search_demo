@@ -163,7 +163,7 @@ def post():
             continue
 
         # 検索タイプで計算方法を変える（プルダウンのみ考える TODO: 別の検索タイプにも対応？？）
-        search_type = get_search_type(ambiguous_item_name_en.name_en)
+        search_type = get_search_type(ambiguous_item_name_en)
 
         # プルダウン
         if (search_type == 2):
