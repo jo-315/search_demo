@@ -88,7 +88,7 @@ def post():
                 # テキスト or チェックボックス
                 if (search_type == 0 or search_type == 1):
                     # queryに利用
-                    params.append(eval('Model.' + key_en + '==' + value + ')'))
+                    params.append(eval('Model.' + key_en + ' == "' + value + '"'))
 
                     # フロントで表示用の配列にappend
                     search_conditions.append([
