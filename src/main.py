@@ -148,7 +148,7 @@ def post():
         # search_conditionsに重要度を格納
         list(filter(lambda x: x[0] == weight_item_name, search_conditions))[0].append(' '.join(['重要度', weight, '%']))
 
-        # あいまい検索のために一度tmpに格納 TODO: あいまい検索しない場合の実装
+        # あいまい検索のために一度tmpに格納
         for r in results:
             r["tmp"] = calc_weight(weight)
 
@@ -193,6 +193,11 @@ def post():
                 x = (eval("r['model']" + '.' + eval("ambiguous_item_name_en")) - min) / step
 
                 r["point"] += calc_ambigious_pull(x, loc, scale, point)
+
+    # 重要度検索をしたがあいまい検索はしなかった場合
+    for r in results:
+        if r["tmp"] > 0:
+            r["point"] += r["tmp"]
 
     # 点数の高い順に上から表示できるようにsort
     results = sorted(results, key=lambda x: x["point"], reverse=True)
